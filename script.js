@@ -1,10 +1,10 @@
-document.getElementById('nut-khan-cap').addEventListener('click', function() {
-  if (confirm('Gọi khẩn cấp 111 nhé?')) {
-    window.location.href = 'tel:111';
-  }
-});
+// ... (giữ phần nút khẩn cấp)
 
-const API_KEY = 'AIzaSyCQrp0MQb6rv1zCbKCMVU5yQao5cmobwBo'; // THAY API KEY GEMINI CỦA EM VÀO ĐÂY
+// Proxy để bypass CORS (chỉ dùng cho demo, miễn phí)
+const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';  // Nếu hết hạn, thay bằng https://api.allorigins.win/raw?url=
+
+const API_KEY = 'AIzaSy...'; // THAY API KEY GEMINI CỦA EM VÀO ĐÂY (lấy mới từ https://ai.google.dev nếu cần)
+
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
@@ -15,28 +15,41 @@ userInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage
 function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
+
   addMessage('Em: ' + message, 'user');
   userInput.value = '';
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + API_KEY, {
+  const fullUrl = PROXY_URL + 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + API_KEY;
+
+  fetch(fullUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: 'Bạn là bạn thân của học sinh Việt Nam. Trả lời tiếng Việt, hỗ trợ chống bạo lực học đường.\nCâu hỏi: ' + message }] }]
+      contents: [{ parts: [{ text: 'Bạn là Bạn Thân AI, hỗ trợ học sinh Việt Nam chống bạo lực học đường, tâm sự, giải bài. Trả lời tiếng Việt nhẹ nhàng, không phán xét.\nCâu hỏi: ' + message }] }]
     })
   })
-  .then(res => res.json())
-  .then(data => {
-    const reply = data.candidates[0].content.parts[0].text;
-    addMessage('AI: ' + reply, 'ai');
+  .then(res => {
+    if (!res.ok) throw new Error('API error: ' + res.status);
+    return res.json();
   })
-  .catch(() => addMessage('Lỗi rồi, thử lại nhé!', 'ai'));
+  .then(data => {
+    if (data.candidates && data.candidates[0]) {
+      const reply = data.candidates[0].content.parts[0].text;
+      addMessage('Bạn Thân AI: ' + reply, 'ai');
+    } else {
+      addMessage('Oops, AI chưa trả lời được. Thử lại nhé!', 'ai');
+    }
+  })
+  .catch(error => {
+    console.error(error); // Để em mở F12 xem lỗi chi tiết
+    addMessage('Có lỗi kết nối (có thể CORS hoặc key). Thử lại hoặc kiểm tra key!', 'ai');
+  });
 }
 
 function addMessage(text, type) {
   const div = document.createElement('div');
   div.textContent = text;
-  div.classList.add(type + '-msg');
+  div.classList.add(type === 'user' ? 'user-msg' : 'ai-msg');
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
