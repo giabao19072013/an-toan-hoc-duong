@@ -411,3 +411,41 @@ footer {
   background: #2980b9;
   transform: scale(1.05);
 }
+/* Fix scroll cho thư viện pháp luật dài mỏi tay */
+#thu-vien {
+  max-height: 80vh; /* Giới hạn chiều cao để scroll */
+  overflow-y: auto; /* Cho phép kéo xuống */
+  padding-bottom: 40px; /* Thêm khoảng trống dưới */
+  scrollbar-width: thin; /* Thanh scroll mỏng đẹp */
+  scrollbar-color: #3498db #f1f1f1;
+}
+
+#thu-vien::-webkit-scrollbar {
+  width: 8px;
+}
+
+#thu-vien::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#thu-vien::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 10px;
+}
+
+#thu-vien::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+}
+
+/* Đảm bảo nội dung không bị che bởi nav sticky */
+main {
+  padding-top: 80px; /* Khoảng cách cho nav sticky */
+}
+
+/* Fix cho mobile (tỉ lệ 9:16) */
+.ratio-9-16 #thu-vien {
+  max-height: 70vh; /* Nhỏ hơn trên mobile để dễ scroll */
+  padding: 20px 10px;
+}
+
