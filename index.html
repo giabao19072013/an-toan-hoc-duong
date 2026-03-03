@@ -21,13 +21,15 @@
   </nav>
 
   <main>
-    <section id="emergency" class="section">
-      <h2>Gọi Khẩn Cấp Ngay!</h2>
-      <button id="nut-khan-cap">GỌI 111 NGAY!</button>
-      <p>Tổng đài bảo vệ trẻ em Việt Nam – Miễn phí 24/24. Nhấn để gọi nếu em đang gặp nguy hiểm hoặc cần giúp đỡ khẩn cấp!</p>
-      <button id="nut-lien-he">Liên Hệ Người Hỗ Trợ Trường</button>
-      <p>Nếu em muốn nói chuyện trực tiếp với thầy cô/cố vấn tâm lý trường, nhấn nút này để gửi tin nhắn ẩn danh hoặc liên hệ.</p>
-    </section>
+<section id="emergency" class="section">
+  <h2>Gọi Khẩn Cấp Ngay!</h2>
+  <button id="nut-khan-cap">GỌI 111 NGAY!</button>
+  <p>Tổng đài bảo vệ trẻ em Việt Nam – Miễn phí 24/24. Nhấn để gọi nếu em đang gặp nguy hiểm hoặc cần giúp đỡ khẩn cấp!</p>
+
+  <!-- Nút liên hệ mở Google Docs có sẵn -->
+  <button id="nut-lien-he">Liên Hệ Thầy Cô / Cố Vấn Trường</button>
+  <p>Nếu em muốn liên hệ trực tiếp với thầy cô hoặc cố vấn tâm lý trường, nhấn nút này để mở tài liệu hướng dẫn (Google Docs).</p>
+</section>
 
     <section id="chat-ai" class="section" style="display:none;">
       <h2>Chat Với AI Bạn Thân</h2>
@@ -86,6 +88,11 @@
     document.getElementById('nut-lien-he').addEventListener('click', () => {
       window.open('https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform', '_blank'); // Thay link nếu em tạo form liên hệ mới
     });
+    // Nút liên hệ mở Google Docs của em
+  document.getElementById('nut-lien-he').addEventListener('click', () => {
+    window.open('https://docs.google.com/document/d/1Kk6YQOXubRmkN5Hq0jlp9RgsiT4ZPJU-0AR2RrVZzkM/edit?usp=sharing', '_blank');
+  });
   </script>
 </body>
 </html>
+
