@@ -8,7 +8,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
+<body class="ratio-16-9">  <!-- Mặc định 16:9, JS sẽ thay đổi -->
+
+  <!-- Modal chọn tỉ lệ màn hình -->
+  <div id="ratio-modal" class="modal">
+    <div class="modal-content">
+      <h2>Chọn Tỉ Lệ Màn Hình Để Tối Ưu Hóa</h2>
+      <p>Chọn tỉ lệ phù hợp với thiết bị của em để web đẹp nhất!</p>
+      <div class="ratio-options">
+        <button onclick="setRatio('9-16')">
+          <img src="https://placeimg.com/180/320/any" alt="9:16 (Mobile dọc)" class="ratio-img">
+          9:16 (Mobile dọc)
+        </button>
+        <button onclick="setRatio('16-9')">
+          <img src="https://placeimg.com/320/180/any" alt="16:9 (Desktop ngang)" class="ratio-img">
+          16:9 (Desktop ngang)
+        </button>
+      </div>
+    </div>
+  </div>
+
   <header>
     <div class="header-content">
       <h1>An Toàn Trường Học</h1>
@@ -50,8 +69,8 @@
 
     <section id="thu-vien" class="section">
       <h2><i class="fas fa-balance-scale"></i> Thư Viện Pháp Luật & Lời Khuyên Chống Bạo Lực Học Đường</h2>
-      <p>Em lướt thoải mái nhé! Dưới đây là các văn bản pháp luật chính thức, chỉ thị, nghị định, luật và lời khuyên thực tế để em hiểu quyền lợi của mình và cách xử lý an toàn.</p>
-      <input type="text" id="search-advise" placeholder="Tìm kiếm từ khóa (bắt nạt, luật, cyber, tâm lý...)">
+      <p>Em lướt thoải mái nhé! Dưới đây là danh sách dài các văn bản pháp luật chính thức, chỉ thị, nghị định, luật, thông tư, chiến lược quốc gia, và lời khuyên thực tế. Tìm kiếm bằng từ khóa để dễ tìm (ví dụ: bắt nạt, luật trẻ em, cyberbullying).</p>
+      <input type="text" id="search-advise" placeholder="Tìm kiếm từ khóa...">
       <ul id="advise-list">
         <li><strong>Bạo lực học đường là gì?</strong> Hành vi cố ý gây tổn thương thể chất, tinh thần, cô lập hoặc phân biệt đối xử giữa học sinh (theo Chỉ thị 1737/CT-BGDĐT năm 2023 và Chỉ thị 03/CT-TTg năm 2026 về tăng cường phòng chống bạo lực học đường).</li>
         <li><strong>Luật Trẻ em 2016 (sửa đổi bổ sung 2020)</strong> Trẻ em có quyền được sống an toàn, học tập không bị bạo lực, được bảo vệ khỏi xâm hại, phân biệt đối xử (Điều 6, Điều 37, Điều 69). Trẻ em bị bạo lực có quyền được hỗ trợ y tế, tâm lý, pháp lý miễn phí (Điều 70).</li>
@@ -63,6 +82,11 @@
         <li><strong>Thông tư 06/2019/TT-BGDĐT</strong> Hướng dẫn xử lý hành vi bạo lực học đường: trường học phải lập biên bản, hỗ trợ nạn nhân, phối hợp phụ huynh và công an nếu nghiêm trọng.</li>
         <li><strong>Luật Giáo dục 2019 (sửa đổi 2024)</strong> Trường học phải đảm bảo môi trường giáo dục an toàn, không bạo lực (Điều 7, Điều 85). Giáo viên, ban giám hiệu chịu trách nhiệm chính trong việc phòng ngừa và xử lý.</li>
         <li><strong>Chiến lược quốc gia về bảo vệ trẻ em 2021-2030</strong> Ưu tiên phòng chống bạo lực học đường, hỗ trợ tâm lý học sinh, xây dựng môi trường an toàn trong trường học (Quyết định 189/QĐ-TTg).</li>
+        <li><strong>Thông tư 26/2020/TT-BGDĐT</strong> Quy định công tác học sinh, sinh viên, bao gồm phòng chống bạo lực học đường, hỗ trợ tâm lý, giáo dục kỹ năng sống (Điều 5, Điều 12).</li>
+        <li><strong>Quyết định 1460/QĐ-TTg năm 2016</strong> Phê duyệt chương trình hành động quốc gia phòng, chống bạo lực học đường giai đoạn 2016-2020 (mở rộng đến 2026), tập trung vào tuyên truyền, đào tạo giáo viên.</li>
+        <li><strong>Luật Người khuyết tật 2010 (sửa đổi 2020)</strong> Bảo vệ học sinh khuyết tật khỏi bạo lực, phân biệt đối xử trong trường học (Điều 12, Điều 31).</li>
+        <li><strong>Chỉ thị 18/CT-TTg năm 2021</strong> Về tăng cường công tác bảo vệ trẻ em, phòng chống bạo lực, xâm hại trẻ em trong gia đình và trường học.</li>
+        <li><strong>Thông tư 09/2021/TT-BGDĐT</strong> Quy định về quản lý và tổ chức dạy học trực tuyến, bao gồm phòng chống cyberbullying trong học online.</li>
         <li><strong>Cách xử lý khi bị bắt nạt trực tiếp</strong> 1. Giữ bình tĩnh, không trả đũa. 2. Báo ngay giáo viên chủ nhiệm hoặc ban giám hiệu. 3. Gọi 111 nếu nguy hiểm. 4. Giữ chứng cứ (tin nhắn, video). 5. Yêu cầu trường lập biên bản xử lý theo Thông tư 06/2019.</li>
         <li><strong>Cyberbullying (bắt nạt mạng)</strong> Chụp màn hình chứng cứ, báo cáo tài khoản trên nền tảng (TikTok, Facebook, Zalo), thông báo phụ huynh/thầy cô. Theo Luật An ninh mạng, có thể yêu cầu gỡ bài và xử phạt người vi phạm.</li>
         <li><strong>Áp lực tâm lý do bạo lực</strong> Thở sâu 4-7-8, tâm sự với người thân, tham gia hoạt động thể thao. Nếu nặng, gọi 111 để được tư vấn tâm lý miễn phí hoặc đến trung tâm y tế gần nhất.</li>
