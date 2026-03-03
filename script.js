@@ -1,3 +1,5 @@
+console.log('Script.js đã load thành công!'); // Debug: mở F12 xem dòng này có hiện không
+
 // Nút khẩn cấp
 document.getElementById('nut-khan-cap').addEventListener('click', () => {
   if (confirm('Gọi 111 ngay nhé? Đây là tổng đài khẩn cấp!')) {
@@ -5,98 +7,59 @@ document.getElementById('nut-khan-cap').addEventListener('click', () => {
   }
 });
 
-// Chuyển tab section
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-}
-showSection('emergency');
-
 // Chat AI với proxy CORS
 const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-const API_KEY = 'AIzaSy...'; // THAY API KEY GEMINI THẬT VÀO ĐÂY!!!
+const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'; // Key SafeSchool mới của em
+
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
 sendBtn.addEventListener('click', sendMessage);
-userInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+userInput.addEventListener('keypress', e => {
+  if (e.key === 'Enter') sendMessage();
+});
 
 function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
+
   addMessage('Em: ' + message, 'user');
   userInput.value = '';
 
-  fetch(PROXY_URL + 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + API_KEY, {
+  const url = PROXY_URL + 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + API_KEY;
+
+  fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: 'Bạn là Bạn Thân AI thân thiện của học sinh Việt Nam. Trả lời tiếng Việt nhẹ nhàng, an ủi, hỗ trợ chống bạo lực học đường, tâm sự, giải bài tập. Không phán xét, khuyến khích tìm giúp đỡ nếu cần.\nCâu hỏi: ' + message }] }]
+      contents: [{
+        parts: [{
+          text: 'Bạn là Bạn Thân AI thân thiện của học sinh Việt Nam. Trả lời bằng tiếng Việt, nhẹ nhàng, an ủi, hỗ trợ chống bạo lực học đường, tâm sự, giải bài tập nếu cần. Không phán xét, luôn khuyến khích tìm sự giúp đỡ từ thầy cô hoặc gọi 111 nếu nguy hiểm.\nCâu hỏi của em: ' + message
+        }]
+      }]
     })
   })
-  .then(res => res.json())
+  .then(res => {
+    console.log('API status:', res.status); // Debug
+    if (!res.ok) throw new Error('API error: ' + res.status);
+    return res.json();
+  })
   .then(data => {
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Oops, AI bận rồi! Thử lại nhé.';
+    console.log('Data từ Gemini:', data); // Debug
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Oops, AI chưa trả lời được. Thử lại nhé!';
     addMessage('Bạn Thân AI: ' + reply, 'ai');
   })
-  .catch(() => addMessage('Lỗi kết nối (có thể CORS hoặc key). Thử lại hoặc kiểm tra key!', 'ai'));
+  .catch(error => {
+    console.error('Lỗi chat:', error);
+    addMessage('Có lỗi kết nối. Thử lại hoặc kiểm tra proxy/key nhé!', 'ai');
+  });
 }
 
 function addMessage(text, type) {
   const div = document.createElement('div');
   div.textContent = text;
-  div.className = type + '-msg';
+  div.className = type === 'user' ? 'user-msg' : 'ai-msg';
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
-
-// Quiz đơn giản
-const quizData = [
-  { q: "Nếu bị bạn bắt nạt, em nên làm gì đầu tiên?", a: "Nói với thầy cô hoặc người lớn tin cậy", options: ["Im lặng chịu đựng", "Trả đũa", "Nói với thầy cô hoặc người lớn tin cậy"] },
-  { q: "Cyberbullying là gì?", a: "Bắt nạt qua mạng xã hội, tin nhắn", options: ["Chơi game online", "Bắt nạt qua mạng xã hội, tin nhắn", "Học nhóm"] },
-  // Thêm 3 câu nữa nếu muốn
-];
-
-let score = 0;
-const quizContainer = document.getElementById('quiz-questions');
-quizData.forEach((item, index) => {
-  const p = document.createElement('p');
-  p.innerHTML = `<strong>Câu ${index+1}:</strong> ${item.q}<br>`;
-  item.options.forEach(opt => {
-    p.innerHTML += `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label><br>`;
-  });
-  quizContainer.appendChild(p);
-});
-
-document.getElementById('quiz-submit').addEventListener('click', () => {
-  score = 0;
-  quizData.forEach((item, i) => {
-    const selected = document.querySelector(`input[name="q${i}"]:checked`);
-    if (selected && selected.value === item.a) score++;
-  });
-  document.getElementById('quiz-result').innerHTML = `Em được ${score}/${quizData.length} điểm! ${score === quizData.length ? 'Siêu giỏi!' : 'Cố lên, em làm tốt lắm!'}`;
-});
-
-// Mood Tracker (lưu localStorage)
-function saveMood(mood) {
-  const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-  history.push({ date: new Date().toLocaleDateString(), mood });
-  localStorage.setItem('moodHistory', JSON.stringify(history));
-  showMoodHistory();
-}
-
-function showMoodHistory() {
-  const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-  document.getElementById('mood-history').innerHTML = '<h3>Lịch sử cảm xúc:</h3>' + history.map(h => `<p>${h.date}: ${h.mood}</p>`).join('');
-}
-showMoodHistory(); // Load khi mở
-
-// Tìm kiếm lời khuyên đơn giản
-document.getElementById('search-advise').addEventListener('input', e => {
-  const term = e.target.value.toLowerCase();
-  const items = document.querySelectorAll('#advise-list li');
-  items.forEach(li => {
-    li.style.display = li.textContent.toLowerCase().includes(term) ? '' : 'none';
-  });
-});
