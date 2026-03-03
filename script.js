@@ -1,24 +1,19 @@
-console.log('Script.js đã load thành công! Key đang dùng:', 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY');
+console.log('Script.js load OK!');
 
-// Nút khẩn cấp
 document.getElementById('nut-khan-cap').addEventListener('click', () => {
-  if (confirm('Gọi 111 ngay nhé? Đây là tổng đài khẩn cấp!')) {
+  if (confirm('Gọi 111 ngay nhé?')) {
     window.location.href = 'tel:111';
   }
 });
 
-// Chat AI
-const PROXY_URL = 'https://corsproxy.io/?'; // Proxy mới, hỗ trợ POST tốt
-const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'; // Key của em
+const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY';
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
 sendBtn.addEventListener('click', sendMessage);
-userInput.addEventListener('keypress', e => {
-  if (e.key === 'Enter') sendMessage();
-});
+userInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
 
 function sendMessage() {
   const message = userInput.value.trim();
@@ -27,11 +22,10 @@ function sendMessage() {
   addMessage('Em: ' + message, 'user');
   userInput.value = '';
 
-  // URL đầy đủ với proxy
-  const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + API_KEY;
-  const url = PROXY_URL + encodeURIComponent(apiUrl);
+  // Bỏ proxy hoàn toàn, dùng model cũ gemini-1.0-pro (ít bị chặn CORS hơn)
+  const url = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro:generateContent?key=' + API_KEY;
 
-  console.log('Gửi request đến Gemini qua proxy corsproxy.io:', url);
+  console.log('Gửi request đến Gemini (model 1.0-pro, bỏ proxy):', url);
 
   fetch(url, {
     method: 'POST',
@@ -45,26 +39,18 @@ function sendMessage() {
     })
   })
   .then(res => {
-    console.log('Status từ proxy:', res.status);
-    if (!res.ok) {
-      return res.text().then(text => {
-        throw new Error(`API error ${res.status}: ${text}`);
-      });
-    }
+    console.log('Status:', res.status);
+    if (!res.ok) return res.text().then(text => { throw new Error(`Error ${res.status}: ${text}`); });
     return res.json();
   })
   .then(data => {
-    console.log('Data từ Gemini:', data);
-    if (data.candidates && data.candidates[0] && data.candidates[0].content.parts[0].text) {
-      const reply = data.candidates[0].content.parts[0].text;
-      addMessage('Bạn Thân AI: ' + reply, 'ai');
-    } else {
-      addMessage('Oops, AI chưa trả lời được. Thử lại nhé!', 'ai');
-    }
+    console.log('Data:', data);
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Oops, AI chưa trả lời được.';
+    addMessage('Bạn Thân AI: ' + reply, 'ai');
   })
   .catch(error => {
-    console.error('Lỗi chi tiết:', error.message);
-    addMessage('Lỗi kết nối: ' + error.message + '. Thử lại hoặc kiểm tra mạng nhé!', 'ai');
+    console.error('Lỗi:', error.message);
+    addMessage('Lỗi: ' + error.message + '. Thử lại nhé!', 'ai');
   });
 }
 
