@@ -1,15 +1,15 @@
-console.log('Script.js đã load thành công!'); // Debug: mở F12 xem dòng này có hiện không
+console.log('Script.js load OK! Key đang dùng:', 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'); // Debug
 
 // Nút khẩn cấp
 document.getElementById('nut-khan-cap').addEventListener('click', () => {
-  if (confirm('Gọi 111 ngay nhé? Đây là tổng đài khẩn cấp!')) {
+  if (confirm('Gọi 111 ngay nhé?')) {
     window.location.href = 'tel:111';
   }
 });
 
-// Chat AI với proxy CORS
+// Chat AI
 const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'; // Key SafeSchool mới của em
+const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'; // Key mới em gửi
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
@@ -29,6 +29,8 @@ function sendMessage() {
 
   const url = PROXY_URL + 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + API_KEY;
 
+  console.log('Gửi request đến Gemini...'); // Debug
+
   fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -41,8 +43,10 @@ function sendMessage() {
     })
   })
   .then(res => {
-    console.log('API status:', res.status); // Debug
-    if (!res.ok) throw new Error('API error: ' + res.status);
+    console.log('Response status:', res.status); // Debug
+    if (!res.ok) {
+      return res.text().then(text => { throw new Error(`API error ${res.status}: ${text}`); });
+    }
     return res.json();
   })
   .then(data => {
@@ -51,8 +55,8 @@ function sendMessage() {
     addMessage('Bạn Thân AI: ' + reply, 'ai');
   })
   .catch(error => {
-    console.error('Lỗi chat:', error);
-    addMessage('Có lỗi kết nối. Thử lại hoặc kiểm tra proxy/key nhé!', 'ai');
+    console.error('Lỗi chi tiết:', error.message);
+    addMessage('Lỗi kết nối: ' + error.message + '. Kiểm tra proxy/key hoặc thử lại!', 'ai');
   });
 }
 
