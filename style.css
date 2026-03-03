@@ -449,3 +449,60 @@ main {
   padding: 20px 10px;
 }
 
+/* FIX SCROLLBAR MẤT - cho phép kéo xuống mượt mà ở mọi section dài */
+html, body {
+  overflow-y: auto !important; /* Buộc scroll toàn trang */
+  height: 100vh;
+}
+
+main {
+  min-height: 100vh;
+  overflow-y: visible;
+  padding-bottom: 100px; /* Thêm khoảng trống dưới footer */
+}
+
+.section {
+  min-height: auto !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+  padding-bottom: 60px;
+}
+
+/* Đặc biệt fix cho thư viện dài mỏi tay */
+#thu-vien {
+  overflow-y: auto !important;
+  max-height: none !important;
+  min-height: 80vh;
+  padding-bottom: 80px;
+  scrollbar-width: thin;
+  scrollbar-color: #3498db #f1f1f1;
+}
+
+#thu-vien::-webkit-scrollbar {
+  width: 10px;
+}
+
+#thu-vien::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#thu-vien::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 10px;
+}
+
+#thu-vien::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+}
+
+/* Fix nav sticky không che scroll */
+nav {
+  z-index: 999 !important;
+}
+
+/* Đảm bảo footer không dính lên nội dung */
+footer {
+  position: relative;
+  z-index: 10;
+}
