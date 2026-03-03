@@ -40,6 +40,7 @@ function sendMessage() {
 function generateSuperSmartReply(msg) {
   const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
+  // Phân tích câu hỏi: check nhiều từ khóa kết hợp
   if (msg.includes('bắt nạt') || msg.includes('bạo lực') || msg.includes('đánh') || msg.includes('xúc phạm') || msg.includes('cô lập')) {
     if (msg.includes('mạng') || msg.includes('cyber') || msg.includes('tiktok') || msg.includes('facebook') || msg.includes('online')) {
       return randomChoice([
