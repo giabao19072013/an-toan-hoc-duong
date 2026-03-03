@@ -26,22 +26,22 @@ function sendMessage() {
   addMessage('Em: ' + message, 'user');
   userInput.value = '';
 
-  fetch('https://api.x.ai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + GROK_API_KEY
-    },
-    body: JSON.stringify({
-      model: 'grok-beta', // Model miễn phí, trả lời tốt
-      messages: [
-        { role: 'system', content: 'Bạn là Bạn Thân AI thân thiện của học sinh Việt Nam. Trả lời bằng tiếng Việt, nhẹ nhàng, an ủi, hỗ trợ chống bạo lực học đường, tâm sự, giải bài tập nếu cần. Không phán xét, luôn khuyến khích tìm sự giúp đỡ từ thầy cô hoặc gọi 111 nếu nguy hiểm.' },
-        { role: 'user', content: message }
-      ],
-      temperature: 0.8,
-      max_tokens: 500
-    })
-  })
+ fetch('/api/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ message })
+})
+.then(res => res.json())
+.then(data => {
+  if (data.error) {
+    addMessage('Lỗi: ' + data.error, 'ai');
+  } else {
+    addMessage('Bạn Thân AI: ' + data.reply, 'ai');
+  }
+})
+.catch(error => {
+  addMessage('Lỗi kết nối proxy: ' + error.message, 'ai');
+});
   .then(res => {
     console.log('Grok status:', res.status);
     if (!res.ok) {
@@ -67,3 +67,4 @@ function addMessage(text, type) {
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
