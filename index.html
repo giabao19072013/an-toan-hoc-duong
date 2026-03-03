@@ -5,51 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>An Toàn Trường Học</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <header>
-    <h1>An Toàn Trường Học</h1>
-    <p>Nơi mọi học sinh được chia sẻ, được hỗ trợ và luôn an toàn!</p>
+    <div class="header-content">
+      <h1>An Toàn Trường Học</h1>
+      <p>Nơi mọi học sinh được bảo vệ, lắng nghe và luôn được yêu thương!</p>
+    </div>
   </header>
 
   <nav>
-    <button onclick="showSection('emergency')">Gọi Khẩn Cấp</button>
-    <button onclick="showSection('chat-ai')">Chat AI Bạn Thân</button>
-    <button onclick="showSection('hom-thu')">Hòm Thư Ẩn Danh</button>
-    <button onclick="showSection('thu-vien')">Thư Viện Lời Khuyên & Pháp Luật</button>
+    <button onclick="showSection('emergency')"><i class="fas fa-phone-alt"></i> Gọi Khẩn Cấp</button>
+    <button onclick="showSection('chat-ai')"><i class="fas fa-robot"></i> Chat AI Bạn Thân</button>
+    <button onclick="showSection('hom-thu')"><i class="fas fa-envelope"></i> Hòm Thư Ẩn Danh</button>
+    <button onclick="showSection('thu-vien')"><i class="fas fa-book"></i> Thư Viện Pháp Luật & Lời Khuyên</button>
   </nav>
 
   <main>
-    <section id="emergency" class="section">
-      <h2>Gọi Khẩn Cấp Ngay!</h2>
+    <section id="emergency" class="section active">
+      <h2><i class="fas fa-exclamation-triangle"></i> Gọi Khẩn Cấp Ngay!</h2>
       <button id="nut-khan-cap">GỌI 111 NGAY!</button>
       <p>Tổng đài bảo vệ trẻ em Việt Nam – Miễn phí 24/24. Nhấn để gọi nếu em đang gặp nguy hiểm hoặc cần giúp đỡ khẩn cấp!</p>
 
-      <!-- Nút liên hệ mở Google Docs văn bản -->
-      <button id="nut-lien-he">Liên Hệ Thầy Cô / Cố Vấn Trường</button>
-      <p>Nếu em muốn liên hệ trực tiếp với thầy cô hoặc cố vấn tâm lý trường, nhấn nút này để mở tài liệu hướng dẫn (Google Docs).</p>
+      <button id="nut-lien-he"><i class="fas fa-user-tie"></i> Liên Hệ Thầy Cô / Cố Vấn Trường</button>
+      <p>Nếu em muốn liên hệ trực tiếp với thầy cô hoặc cố vấn tâm lý trường, nhấn nút này để mở tài liệu hướng dẫn.</p>
     </section>
 
-    <section id="chat-ai" class="section" style="display:none;">
-      <h2>Chat Với AI Bạn Thân</h2>
+    <section id="chat-ai" class="section">
+      <h2><i class="fas fa-comment-dots"></i> Chat Với AI Bạn Thân</h2>
       <div id="chat-box"></div>
       <div class="input-area">
         <input type="text" id="user-input" placeholder="Em đang gặp chuyện gì? Kể mình nghe nhé...">
-        <button id="send-btn">Gửi</button>
+        <button id="send-btn"><i class="fas fa-paper-plane"></i> Gửi</button>
       </div>
     </section>
 
-    <section id="hom-thu" class="section" style="display:none;">
-      <h2>Hòm Thư Thầm Kín</h2>
+    <section id="hom-thu" class="section">
+      <h2><i class="fas fa-lock"></i> Hòm Thư Thầm Kín</h2>
       <p>Chia sẻ bất cứ điều gì, hoàn toàn ẩn danh. Không ai biết em là ai!</p>
-      <iframe src="https://docs.google.com/document/d/1Kk6YQOXubRmkN5Hq0jlp9RgsiT4ZPJU-0AR2RrVZzkM/edit?usp=sharing" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Đang tải...</iframe>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Đang tải...</iframe>
     </section>
 
-    <section id="thu-vien" class="section" style="display:none;">
-      <h2>Thư Viện Lời Khuyên & Pháp Luật Chống Bạo Lực Học Đường</h2>
-      <p>Em có thể đọc để biết quyền của mình và cách xử lý an toàn. Tìm kiếm bằng từ khóa (ví dụ: bắt nạt, luật, cyber, tâm lý).</p>
-      <input type="text" id="search-advise" placeholder="Tìm lời khuyên...">
+    <section id="thu-vien" class="section">
+      <h2><i class="fas fa-balance-scale"></i> Thư Viện Pháp Luật & Lời Khuyên Chống Bạo Lực Học Đường</h2>
+      <p>Em lướt thoải mái nhé! Dưới đây là các văn bản pháp luật chính thức, chỉ thị, nghị định, luật và lời khuyên thực tế để em hiểu quyền lợi của mình và cách xử lý an toàn.</p>
+      <input type="text" id="search-advise" placeholder="Tìm kiếm từ khóa (bắt nạt, luật, cyber, tâm lý...)">
       <ul id="advise-list">
         <li><strong>Bạo lực học đường là gì?</strong> Hành vi cố ý gây tổn thương thể chất, tinh thần, cô lập hoặc phân biệt đối xử giữa học sinh (theo Chỉ thị 1737/CT-BGDĐT năm 2023 và Chỉ thị 03/CT-TTg năm 2026 về tăng cường phòng chống bạo lực học đường).</li>
         <li><strong>Luật Trẻ em 2016 (sửa đổi bổ sung 2020)</strong> Trẻ em có quyền được sống an toàn, học tập không bị bạo lực, được bảo vệ khỏi xâm hại, phân biệt đối xử (Điều 6, Điều 37, Điều 69). Trẻ em bị bạo lực có quyền được hỗ trợ y tế, tâm lý, pháp lý miễn phí (Điều 70).</li>
@@ -59,8 +61,10 @@
         <li><strong>Bộ luật Hình sự 2015 (sửa đổi 2017)</strong> Hành vi đánh đập, gây thương tích học sinh có thể bị truy cứu hình sự (Điều 134: Cố ý gây thương tích; Điều 155: Xâm hại trẻ em dưới 16 tuổi; Điều 185: Bạo lực gia đình ảnh hưởng trẻ em).</li>
         <li><strong>Luật Phòng, chống bạo lực gia đình 2022</strong> Bảo vệ trẻ em khỏi bạo lực gia đình (Điều 4, Điều 18), trường học phối hợp với cơ quan chức năng khi phát hiện học sinh bị ảnh hưởng từ gia đình.</li>
         <li><strong>Thông tư 06/2019/TT-BGDĐT</strong> Hướng dẫn xử lý hành vi bạo lực học đường: trường học phải lập biên bản, hỗ trợ nạn nhân, phối hợp phụ huynh và công an nếu nghiêm trọng.</li>
+        <li><strong>Luật Giáo dục 2019 (sửa đổi 2024)</strong> Trường học phải đảm bảo môi trường giáo dục an toàn, không bạo lực (Điều 7, Điều 85). Giáo viên, ban giám hiệu chịu trách nhiệm chính trong việc phòng ngừa và xử lý.</li>
+        <li><strong>Chiến lược quốc gia về bảo vệ trẻ em 2021-2030</strong> Ưu tiên phòng chống bạo lực học đường, hỗ trợ tâm lý học sinh, xây dựng môi trường an toàn trong trường học (Quyết định 189/QĐ-TTg).</li>
         <li><strong>Cách xử lý khi bị bắt nạt trực tiếp</strong> 1. Giữ bình tĩnh, không trả đũa. 2. Báo ngay giáo viên chủ nhiệm hoặc ban giám hiệu. 3. Gọi 111 nếu nguy hiểm. 4. Giữ chứng cứ (tin nhắn, video). 5. Yêu cầu trường lập biên bản xử lý theo Thông tư 06/2019.</li>
-        <li><strong>Cyberbullying (bắt nạt mạng)</strong> Chụp màn hình chứng cứ, báo cáo tài khoản trên nền tảng (TikTok, Facebook, Zalo), thông báo phụ huynh/thầy cô. Theo Luật An ninh mạng 2018, có thể yêu cầu gỡ bài và xử phạt người vi phạm.</li>
+        <li><strong>Cyberbullying (bắt nạt mạng)</strong> Chụp màn hình chứng cứ, báo cáo tài khoản trên nền tảng (TikTok, Facebook, Zalo), thông báo phụ huynh/thầy cô. Theo Luật An ninh mạng, có thể yêu cầu gỡ bài và xử phạt người vi phạm.</li>
         <li><strong>Áp lực tâm lý do bạo lực</strong> Thở sâu 4-7-8, tâm sự với người thân, tham gia hoạt động thể thao. Nếu nặng, gọi 111 để được tư vấn tâm lý miễn phí hoặc đến trung tâm y tế gần nhất.</li>
         <li><strong>Nguồn uy tín tham khảo</strong> - Bộ Giáo dục và Đào tạo: moet.gov.vn (Chỉ thị và Thông tư phòng chống bạo lực học đường)<br>- UNICEF Việt Nam: unicef.org/vietnam/vi (Báo cáo quyền trẻ em và bạo lực)<br>- Tổng đài bảo vệ trẻ em: 111 (hỗ trợ 24/24)<br>- Thư viện Pháp luật: thuvienphapluat.vn (tìm văn bản luật đầy đủ)<br>- Cổng thông tin điện tử Chính phủ: chinhphu.vn (Chỉ thị, Nghị định mới nhất)</li>
       </ul>
@@ -93,4 +97,3 @@
   </script>
 </body>
 </html>
-
