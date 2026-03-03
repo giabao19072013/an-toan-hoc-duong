@@ -11,6 +11,17 @@ body {
   min-height: 100vh;
   line-height: 1.6;
   transition: all 0.5s ease;
+  position: relative;
+}
+
+/* Particles background */
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 /* Tối ưu theo tỉ lệ màn hình */
@@ -381,4 +392,22 @@ footer {
   padding: 30px;
   margin-top: 80px;
   font-size: 1em;
+  position: relative;
+}
+
+#change-ratio-btn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.3s;
+}
+
+#change-ratio-btn:hover {
+  background: #2980b9;
+  transform: scale(1.05);
 }
