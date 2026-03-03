@@ -1,14 +1,14 @@
-console.log('Script.js load OK! Key đang dùng:', API_KEY);
+console.log('Script.js đã load thành công! Key đang dùng:', 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY');
 
-// Nút khẩn cấp (giữ nguyên)
+// Nút khẩn cấp
 document.getElementById('nut-khan-cap').addEventListener('click', () => {
-  if (confirm('Gọi 111 ngay nhé?')) {
+  if (confirm('Gọi 111 ngay nhé? Đây là tổng đài khẩn cấp!')) {
     window.location.href = 'tel:111';
   }
 });
 
 // Chat AI
-const PROXY_URL = 'https://api.allorigins.win/get?url=';  // Proxy mới, ổn hơn // Hoặc giữ proxy cũ nếu đang unlock
+const PROXY_URL = 'https://corsproxy.io/?'; // Proxy mới, hỗ trợ POST tốt hơn
 const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'; // Key của em
 
 const chatBox = document.getElementById('chat-box');
@@ -16,7 +16,9 @@ const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
 sendBtn.addEventListener('click', sendMessage);
-userInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+userInput.addEventListener('keypress', e => {
+  if (e.key === 'Enter') sendMessage();
+});
 
 function sendMessage() {
   const message = userInput.value.trim();
@@ -25,9 +27,11 @@ function sendMessage() {
   addMessage('Em: ' + message, 'user');
   userInput.value = '';
 
-  // THAY MODEL Ở ĐÂY: dùng gemini-2.5-flash (mới nhất 2026)
-const url = PROXY_URL + encodeURIComponent('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + API_KEY);
-  console.log('Gửi request đến Gemini với model gemini-2.5-flash...');
+  // URL đầy đủ với proxy
+  const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + API_KEY;
+  const url = PROXY_URL + encodeURIComponent(apiUrl);
+
+  console.log('Gửi request đến Gemini qua proxy:', url);
 
   fetch(url, {
     method: 'POST',
@@ -41,9 +45,11 @@ const url = PROXY_URL + encodeURIComponent('https://generativelanguage.googleapi
     })
   })
   .then(res => {
-    console.log('API status:', res.status);
+    console.log('API status từ proxy:', res.status);
     if (!res.ok) {
-      return res.text().then(text => { throw new Error(`API error ${res.status}: ${text}`); });
+      return res.text().then(text => {
+        throw new Error(`API error ${res.status}: ${text}`);
+      });
     }
     return res.json();
   })
@@ -54,7 +60,7 @@ const url = PROXY_URL + encodeURIComponent('https://generativelanguage.googleapi
   })
   .catch(error => {
     console.error('Lỗi chi tiết:', error.message);
-    addMessage('Lỗi: ' + error.message + '. Thử lại nhé!', 'ai');
+    addMessage('Lỗi kết nối: ' + error.message + '. Thử lại hoặc kiểm tra proxy nhé!', 'ai');
   });
 }
 
@@ -65,5 +71,3 @@ function addMessage(text, type) {
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
-
-
