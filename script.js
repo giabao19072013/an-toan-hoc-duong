@@ -8,7 +8,7 @@ document.getElementById('nut-khan-cap').addEventListener('click', () => {
 });
 
 // Chat AI
-const PROXY_URL = 'https://corsproxy.io/?'; // Proxy mới, hỗ trợ POST tốt hơn
+const PROXY_URL = 'https://corsproxy.io/?'; // Proxy mới, hỗ trợ POST tốt
 const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'; // Key của em
 
 const chatBox = document.getElementById('chat-box');
@@ -31,7 +31,7 @@ function sendMessage() {
   const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + API_KEY;
   const url = PROXY_URL + encodeURIComponent(apiUrl);
 
-  console.log('Gửi request đến Gemini qua proxy:', url);
+  console.log('Gửi request đến Gemini qua proxy corsproxy.io:', url);
 
   fetch(url, {
     method: 'POST',
@@ -45,7 +45,7 @@ function sendMessage() {
     })
   })
   .then(res => {
-    console.log('API status từ proxy:', res.status);
+    console.log('Status từ proxy:', res.status);
     if (!res.ok) {
       return res.text().then(text => {
         throw new Error(`API error ${res.status}: ${text}`);
@@ -55,12 +55,16 @@ function sendMessage() {
   })
   .then(data => {
     console.log('Data từ Gemini:', data);
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Oops, AI chưa trả lời được. Thử lại nhé!';
-    addMessage('Bạn Thân AI: ' + reply, 'ai');
+    if (data.candidates && data.candidates[0] && data.candidates[0].content.parts[0].text) {
+      const reply = data.candidates[0].content.parts[0].text;
+      addMessage('Bạn Thân AI: ' + reply, 'ai');
+    } else {
+      addMessage('Oops, AI chưa trả lời được. Thử lại nhé!', 'ai');
+    }
   })
   .catch(error => {
     console.error('Lỗi chi tiết:', error.message);
-    addMessage('Lỗi kết nối: ' + error.message + '. Thử lại hoặc kiểm tra proxy nhé!', 'ai');
+    addMessage('Lỗi kết nối: ' + error.message + '. Thử lại hoặc kiểm tra mạng nhé!', 'ai');
   });
 }
 
