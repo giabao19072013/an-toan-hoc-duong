@@ -9,23 +9,39 @@
 <body>
   <header>
     <h1>An Toàn Trường Học</h1>
-    <p>Nơi mọi học sinh được chia sẻ và an toàn!</p>
+    <p>Nơi mọi học sinh được chia sẻ, được giúp đỡ và an toàn!</p>
   </header>
 
+  <nav>
+    <button onclick="showSection('emergency')">Gọi Khẩn Cấp</button>
+    <button onclick="showSection('chat-ai')">Chat AI</button>
+    <!-- Thêm sau khi có hòm thư -->
+  </nav>
+
   <main>
-    <section id="emergency">
-      <h2>Gọi Khẩn Cấp</h2>
+    <section id="emergency" class="section">
+      <h2>Gọi Khẩn Cấp Ngay!</h2>
       <button id="nut-khan-cap">GỌI 111 NGAY!</button>
+      <p>Tổng đài bảo vệ trẻ em miễn phí 24/24. Nhấn để gọi!</p>
     </section>
 
-    <section id="chat-ai">
+    <section id="chat-ai" class="section" style="display: none;">
       <h2>Chat Với AI Bạn Thân</h2>
       <div id="chat-box"></div>
-      <input type="text" id="user-input" placeholder="Kể mình nghe em đang gặp gì...">
-      <button id="send-btn">Gửi</button>
+      <div class="input-area">
+        <input type="text" id="user-input" placeholder="Em đang gặp chuyện gì? Kể mình nghe...">
+        <button id="send-btn">Gửi</button>
+      </div>
     </section>
   </main>
 
   <script src="script.js"></script>
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+    showSection('emergency'); // Mở mặc định khẩn cấp
+  </script>
 </body>
 </html>
