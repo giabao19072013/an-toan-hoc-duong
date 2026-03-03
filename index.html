@@ -13,73 +13,60 @@
   </header>
 
   <nav>
-    <button onclick="showSection('emergency')">Gọi Khẩn Cấp</button>
-    <button onclick="showSection('chat-ai')">Chat AI Bạn Thân</button>
-    <button onclick="showSection('hom-thu')">Hòm Thư Ẩn Danh</button>
-    <button onclick="showSection('quiz')">Quiz Chống Bạo Lực</button>
-    <button onclick="showSection('mood')">Mood Tracker</button>
-    <button onclick="showSection('thu-vien')">Thư Viện Lời Khuyên</button>
+    <button data-section="emergency">Gọi Khẩn Cấp</button>
+    <button data-section="chat-ai">Chat AI Bạn Thân</button>
+    <button data-section="hom-thu">Hòm Thư Ẩn Danh</button>
+    <button data-section="thu-vien">Thư Viện Lời Khuyên</button>
+    <!-- Thêm quiz/mood sau nếu muốn -->
   </nav>
 
   <main>
-    <!-- Gọi khẩn cấp -->
     <section id="emergency" class="section">
       <h2>Gọi Khẩn Cấp Ngay!</h2>
-      <button id="nut-khan-cap">GỌI 111 (Miễn Phí 24/24)</button>
-      <p>Tổng đài bảo vệ trẻ em Việt Nam. Nhấn để gọi ngay nếu nguy hiểm!</p>
+      <button id="nut-khan-cap">GỌI 111 NGAY!</button>
+      <p>Tổng đài bảo vệ trẻ em miễn phí 24/24. Nhấn nếu cần giúp đỡ khẩn!</p>
     </section>
 
-    <!-- Chat AI -->
     <section id="chat-ai" class="section" style="display:none;">
       <h2>Chat Với AI Bạn Thân</h2>
       <div id="chat-box"></div>
       <div class="input-area">
-        <input type="text" id="user-input" placeholder="Em đang gặp chuyện gì? Kể mình nghe nhé...">
+        <input type="text" id="user-input" placeholder="Em đang gặp chuyện gì? Kể mình nghe...">
         <button id="send-btn">Gửi</button>
       </div>
     </section>
 
-    <!-- Hòm thư ẩn danh - Thay src bằng link embed Google Form của em -->
     <section id="hom-thu" class="section" style="display:none;">
       <h2>Hòm Thư Thầm Kín</h2>
-      <p>Chia sẻ bất cứ điều gì, hoàn toàn ẩn danh. Không ai biết em là ai!</p>
-      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform?usp=publish-editor" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0">Đang tải...</iframe>
-      <p>(Em tạo Google Form rồi copy link embed iframe vào src trên nhé!)</p>
+      <p>Em có thể chia sẻ bất cứ điều gì, hoàn toàn ẩn danh. Không ai biết em là ai!</p>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Đang tải...</iframe>
     </section>
 
-    <!-- Quiz -->
-    <section id="quiz" class="section" style="display:none;">
-      <h2>Quiz: Em Có Biết Chống Bạo Lực Không?</h2>
-      <div id="quiz-questions"></div>
-      <button id="quiz-submit">Nộp Bài</button>
-      <div id="quiz-result"></div>
-    </section>
-
-    <!-- Mood Tracker -->
-    <section id="mood" class="section" style="display:none;">
-      <h2>Mood Tracker Hàng Ngày</h2>
-      <p>Chọn cảm xúc hôm nay của em:</p>
-      <button onclick="saveMood('Vui')">😊 Vui</button>
-      <button onclick="saveMood('Buồn')">😔 Buồn</button>
-      <button onclick="saveMood('Giận')">😠 Giận</button>
-      <button onclick="saveMood('Sợ')">😟 Sợ</button>
-      <div id="mood-history"></div>
-    </section>
-
-    <!-- Thư viện lời khuyên -->
     <section id="thu-vien" class="section" style="display:none;">
       <h2>Thư Viện Lời Khuyên & Pháp Luật</h2>
-      <input type="text" id="search-advise" placeholder="Tìm lời khuyên... (ví dụ: bắt nạt)">
-      <ul id="advise-list">
-        <li><strong>Bắt nạt trực tiếp:</strong> Nói với thầy cô ngay, gọi 111 nếu nguy hiểm.</li>
-        <li><strong>Cyberbullying:</strong> Chụp màn hình, báo cáo tài khoản, đừng trả đũa.</li>
-        <li><strong>Pháp luật:</strong> Luật Trẻ em 2016 bảo vệ quyền học tập an toàn.</li>
-        <li><strong>Áp lực học tập:</strong> Chia sẻ với gia đình, nghỉ ngơi hợp lý.</li>
+      <ul>
+        <li>Nếu bị bắt nạt: Nói ngay với thầy cô hoặc gọi 111.</li>
+        <li>Cyberbullying: Chụp màn hình, báo cáo, đừng im lặng.</li>
+        <li>Quyền trẻ em: Luật Trẻ em 2016 bảo vệ em khỏi bạo lực.</li>
       </ul>
     </section>
   </main>
 
   <script src="script.js"></script>
+  <script>
+    // Fix nút nav đơ: dùng data-section
+    document.querySelectorAll('nav button').forEach(button => {
+      button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-section');
+        console.log('Nhấn nút chuyển đến:', targetId); // Debug: mở F12 xem có log không
+        document.querySelectorAll('.section').forEach(sec => {
+          sec.style.display = 'none';
+        });
+        document.getElementById(targetId).style.display = 'block';
+      });
+    });
+    // Mở mặc định emergency
+    document.getElementById('emergency').style.display = 'block';
+  </script>
 </body>
 </html>
-
