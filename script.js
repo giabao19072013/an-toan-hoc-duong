@@ -26,8 +26,7 @@ function sendMessage() {
   userInput.value = '';
 
   // THAY MODEL Ở ĐÂY: dùng gemini-2.5-flash (mới nhất 2026)
-  const url = PROXY_URL + 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + API_KEY;
-
+const url = PROXY_URL + encodeURIComponent('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + API_KEY);
   console.log('Gửi request đến Gemini với model gemini-2.5-flash...');
 
   fetch(url, {
@@ -66,4 +65,5 @@ function addMessage(text, type) {
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
 
