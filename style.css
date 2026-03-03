@@ -1,0 +1,7 @@
+body { font-family: Arial; background: #f0f8ff; margin: 0; padding: 20px; }
+header { text-align: center; background: #4CAF50; color: white; padding: 20px; }
+button { padding: 15px; font-size: 20px; background: #ff4444; color: white; border: none; cursor: pointer; }
+#nut-khan-cap { width: 100%; max-width: 400px; display: block; margin: 20px auto; }
+#chat-box { border: 1px solid #ccc; height: 200px; overflow-y: scroll; padding: 10px; background: white; }
+.user-msg { color: blue; text-align: right; }
+.ai-msg { background: #e0ffe0; padding: 10px; border-radius: 10px; }
