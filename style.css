@@ -451,16 +451,14 @@ main {
 
 /* FIX SCROLLBAR MẤT - cho phép kéo xuống mượt mà ở mọi section dài */
 html, body {
-  overflow-y: auto !important; /* Buộc scroll toàn trang */
-  height: 100vh;
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
 }
 
 main {
-  min-height: 100vh;
-  overflow-y: visible;
-  padding-bottom: 100px; /* Thêm khoảng trống dưới footer */
+  padding-bottom: 0;
 }
-
 .section {
   min-height: auto !important;
   max-height: none !important;
@@ -505,4 +503,8 @@ nav {
 footer {
   position: relative;
   z-index: 10;
+}
+
+footer {
+  margin-bottom: 0;
 }
