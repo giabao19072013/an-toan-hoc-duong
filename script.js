@@ -8,7 +8,7 @@ document.getElementById('nut-khan-cap').addEventListener('click', () => {
 });
 
 // Chat AI
-const PROXY_URL = 'https://cors-anywhere.herokuapp.com/'; // Hoặc giữ proxy cũ nếu đang unlock
+const PROXY_URL = 'https://api.allorigins.win/get?url=';  // Proxy mới, ổn hơn // Hoặc giữ proxy cũ nếu đang unlock
 const API_KEY = 'AIzaSyDzg_4MR8m8b7akvKM-my5BPUCnNB8mfTY'; // Key của em
 
 const chatBox = document.getElementById('chat-box');
@@ -66,3 +66,4 @@ function addMessage(text, type) {
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
