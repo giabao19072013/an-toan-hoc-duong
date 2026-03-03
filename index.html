@@ -7,8 +7,10 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Particles.js CDN cho hiệu ứng hạt nền -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
-<body class="ratio-16-9">
+<body class="ratio-16-9" id="particles-js">
 
   <!-- Modal chọn tỉ lệ màn hình -->
   <div id="ratio-modal" class="ratio-modal">
@@ -70,7 +72,7 @@
 
     <section id="thu-vien" class="section">
       <h2><i class="fas fa-balance-scale"></i> Thư Viện Pháp Luật & Lời Khuyên Chống Bạo Lực Học Đường</h2>
-      <p>Em lướt thoải mái nhé! Dưới đây là danh sách rất dài các văn bản pháp luật chính thức, chỉ thị, nghị định, luật, thông tư, chiến lược quốc gia, và lời khuyên thực tế. Tìm kiếm bằng từ khóa để dễ tìm (ví dụ: bắt nạt, luật trẻ em, cyberbullying).</p>
+      <p>Em lướt thoải mái nhé! Dưới đây là danh sách siêu dài các văn bản pháp luật chính thức, chỉ thị, nghị định, luật, thông tư, chiến lược quốc gia, và lời khuyên thực tế. Tìm kiếm bằng từ khóa để dễ tìm (ví dụ: bắt nạt, luật trẻ em, cyberbullying).</p>
       <input type="text" id="search-advise" placeholder="Tìm kiếm từ khóa...">
       <ul id="advise-list">
         <li><strong>Bạo lực học đường là gì?</strong> Hành vi cố ý gây tổn thương thể chất, tinh thần, cô lập hoặc phân biệt đối xử giữa học sinh (theo Chỉ thị 1737/CT-BGDĐT năm 2023 và Chỉ thị 03/CT-TTg năm 2026 về tăng cường phòng chống bạo lực học đường).</li>
@@ -93,6 +95,9 @@
         <li><strong>Thông tư 28/2020/TT-BGDĐT</strong> Quy định về quản lý học sinh nội trú, bán trú, bao gồm phòng chống bạo lực trong ký túc xá.</li>
         <li><strong>Quyết định 189/QĐ-TTg năm 2021</strong> Phê duyệt Chiến lược quốc gia bảo vệ trẻ em giai đoạn 2021-2030, nhấn mạnh phòng chống bạo lực học đường và hỗ trợ tâm lý.</li>
         <li><strong>Luật Trật tự, an toàn giao thông đường bộ 2024</strong> Liên quan đến bạo lực học đường liên quan tai nạn giao thông (Điều 10, Điều 45), trường học phải giáo dục an toàn giao thông để tránh bạo lực liên quan.</li>
+        <li><strong>Luật Phòng, chống mua bán người 2011 (sửa đổi 2020)</strong> Bảo vệ trẻ em khỏi xâm hại, bạo lực liên quan đến mua bán người (Điều 3, Điều 19), trường học phối hợp phát hiện và báo cáo.</li>
+        <li><strong>Thông tư 22/2021/TT-BGDĐT</strong> Quy định về hoạt động tư vấn tâm lý học đường, hỗ trợ học sinh gặp áp lực, bạo lực.</li>
+        <li><strong>Chiến lược quốc gia phòng ngừa và ứng phó với thiên tai 2021-2030</strong> Liên quan gián tiếp đến bạo lực học đường trong trường hợp thiên tai gây áp lực tâm lý (Quyết định 1055/QĐ-TTg).</li>
         <li><strong>Cách xử lý khi bị bắt nạt trực tiếp</strong> 1. Giữ bình tĩnh, không trả đũa. 2. Báo ngay giáo viên chủ nhiệm hoặc ban giám hiệu. 3. Gọi 111 nếu nguy hiểm. 4. Giữ chứng cứ (tin nhắn, video). 5. Yêu cầu trường lập biên bản xử lý theo Thông tư 06/2019.</li>
         <li><strong>Cyberbullying (bắt nạt mạng)</strong> Chụp màn hình chứng cứ, báo cáo tài khoản trên nền tảng (TikTok, Facebook, Zalo), thông báo phụ huynh/thầy cô. Theo Luật An ninh mạng, có thể yêu cầu gỡ bài và xử phạt người vi phạm.</li>
         <li><strong>Áp lực tâm lý do bạo lực</strong> Thở sâu 4-7-8, tâm sự với người thân, tham gia hoạt động thể thao. Nếu nặng, gọi 111 để được tư vấn tâm lý miễn phí hoặc đến trung tâm y tế gần nhất.</li>
@@ -103,6 +108,7 @@
 
   <footer>
     <p>Dự án của Nguyễn Gia Bảo - Lớp 7.2 - Trường THCS Lý Tự Trọng - Phường An Hội Đông</p>
+    <button id="change-ratio-btn"><i class="fas fa-expand-arrows-alt"></i> Thay đổi tỉ lệ màn hình</button>
   </footer>
 
   <script src="script.js"></script>
@@ -137,6 +143,7 @@
       document.getElementById('ratio-modal').style.display = 'none';
     }
 
+    // Hiển thị modal nếu chưa chọn tỉ lệ
     window.addEventListener('load', () => {
       const savedRatio = localStorage.getItem('userRatio');
       if (savedRatio) {
@@ -144,6 +151,30 @@
       } else {
         document.getElementById('ratio-modal').style.display = 'flex';
       }
+
+      // Hiệu ứng particles.js cho nền
+      particlesJS('particles-js', {
+        "particles": {
+          "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#3498db" },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.5, "random": true },
+          "size": { "value": 3, "random": true },
+          "line_linked": { "enable": true, "distance": 150, "color": "#3498db", "opacity": 0.4, "width": 1 },
+          "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+          "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
+        },
+        "retina_detect": true
+      });
+    });
+
+    // Nút thay đổi tỉ lệ ở footer
+    document.getElementById('change-ratio-btn').addEventListener('click', () => {
+      document.getElementById('ratio-modal').style.display = 'flex';
     });
   </script>
 </body>
