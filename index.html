@@ -30,26 +30,19 @@
     </div>
   </div>
 
-  <!-- Sidebar menu bên trái (ẩn mặc định) -->
-  <div id="sidebar" class="sidebar">
-    <button id="close-sidebar" class="close-btn"><i class="fas fa-times"></i></button>
-    <ul>
-      <li><button onclick="showSection('emergency')"><i class="fas fa-phone-alt"></i> Gọi Khẩn Cấp</button></li>
-      <li><button onclick="showSection('chat-ai')"><i class="fas fa-robot"></i> Chat AI Bạn Thân</button></li>
-      <li><button onclick="showSection('hom-thu')"><i class="fas fa-envelope"></i> Hòm Thư Ẩn Danh</button></li>
-      <li><button onclick="showSection('thu-vien')"><i class="fas fa-balance-scale"></i> Thư Viện Pháp Luật & Lời Khuyên</button></li>
-    </ul>
-  </div>
-
-  <!-- Nút hamburger để mở sidebar -->
-  <button id="hamburger-btn" class="hamburger"><i class="fas fa-bars"></i></button>
-
   <header>
     <div class="header-content">
       <h1>An Toàn Trường Học</h1>
       <p>Nơi mọi học sinh được bảo vệ, lắng nghe và luôn được yêu thương!</p>
     </div>
   </header>
+
+  <nav>
+    <button onclick="showSection('emergency')"><i class="fas fa-phone-alt"></i> Gọi Khẩn Cấp</button>
+    <button onclick="showSection('chat-ai')"><i class="fas fa-robot"></i> Chat AI Bạn Thân</button>
+    <button onclick="showSection('hom-thu')"><i class="fas fa-envelope"></i> Hòm Thư Ẩn Danh</button>
+    <button onclick="showSection('thu-vien')"><i class="fas fa-balance-scale"></i> Thư Viện Pháp Luật & Lời Khuyên</button>
+  </nav>
 
   <main>
     <section id="emergency" class="section active">
@@ -122,7 +115,6 @@
     function showSection(id) {
       document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
       document.getElementById(id).style.display = 'block';
-      closeSidebar(); // Đóng sidebar khi chọn tab
     }
     showSection('emergency');
 
@@ -182,28 +174,6 @@
     document.getElementById('change-ratio-btn').addEventListener('click', () => {
       document.getElementById('ratio-modal').style.display = 'flex';
     });
-
-    // Sidebar (menu bên trái)
-    const sidebar = document.getElementById('sidebar');
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const closeSidebarBtn = document.getElementById('close-sidebar');
-
-    hamburgerBtn.addEventListener('click', () => {
-      sidebar.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Ngăn scroll nền khi sidebar mở
-    });
-
-    closeSidebarBtn.addEventListener('click', closeSidebar);
-    document.addEventListener('click', (e) => {
-      if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-        closeSidebar();
-      }
-    });
-
-    function closeSidebar() {
-      sidebar.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
   </script>
 </body>
 </html>
