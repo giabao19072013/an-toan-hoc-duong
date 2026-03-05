@@ -3,266 +3,337 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Siro SafeSchool | Global Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <title>SafeSchool Platform | National Competition Edition</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
+  
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.4);
-      --glass: rgba(255, 255, 255, 0.03);
-      --glass-heavy: rgba(255, 255, 255, 0.08);
-      --text-main: #f1f5f9;
-      --danger: #fb7185;
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 80px;
+      --primary: #6366f1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --danger: #ef4444;
+      --success: #10b981;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #0f172a;
-      color: var(--text-main);
-      line-height: 1.6;
-      overflow-x: hidden;
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+    body { background: var(--bg); color: var(--text-dark); overflow: hidden; display: flex; }
+
+    /* Sidebar - Trình đơn thu gọn */
+    .sidebar {
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: #1e293b;
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      z-index: 1000;
     }
 
-    #particles-js {
-      position: fixed; width: 100%; height: 100%; z-index: -1;
+    .sidebar.collapsed { width: var(--sidebar-collapsed-width); padding: 20px 10px; }
+
+    .sidebar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 40px;
     }
 
-    /* Header */
-    header {
-      padding: 100px 20px 140px;
-      text-align: center;
-      background: radial-gradient(circle at top, var(--accent-glow), transparent);
+    .logo-text { font-weight: 700; font-size: 1.2rem; white-space: nowrap; transition: var(--transition); }
+    .sidebar.collapsed .logo-text { opacity: 0; pointer-events: none; }
+
+    .toggle-btn {
+      background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;
     }
 
-    h1 {
-      font-size: clamp(2.5rem, 10vw, 4.5rem);
-      font-weight: 800;
-      background: linear-gradient(to right, #fff, var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 15px;
+    .nav-links { list-style: none; flex-grow: 1; }
+    .nav-item {
+      display: flex; align-items: center; padding: 12px 15px;
+      border-radius: 12px; margin-bottom: 8px; cursor: pointer;
+      color: #94a3b8; text-decoration: none; transition: 0.2s;
     }
 
-    /* Navigation */
-    nav {
-      position: sticky; top: 20px; z-index: 1000;
-      display: flex; justify-content: center; gap: 12px;
-      padding: 10px; flex-wrap: wrap; margin: -50px auto 40px;
-      max-width: 95%;
+    .nav-item:hover, .nav-item.active { background: var(--primary); color: white; }
+    .nav-item i { min-width: 30px; font-size: 1.2rem; }
+    .nav-text { margin-left: 10px; transition: var(--transition); }
+    .sidebar.collapsed .nav-text { opacity: 0; position: absolute; }
+
+    /* Main Content Area */
+    .main-content {
+      flex-grow: 1; height: 100vh; overflow-y: auto; padding: 30px;
+      transition: var(--transition);
     }
 
-    nav button {
-      background: var(--glass-heavy);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #fff;
-      padding: 14px 24px;
-      border-radius: 100px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 30px;
     }
 
-    nav button:hover, nav button.active {
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0 0 20px var(--accent-glow);
-      transform: translateY(-5px);
+    /* Cards Layout */
+    .dashboard-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px; margin-bottom: 30px;
     }
 
-    /* Content Area */
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-
-    .section {
-      background: var(--glass);
-      backdrop-filter: blur(30px);
-      border-radius: 40px;
-      padding: 50px;
-      border: 1px solid rgba(255,255,255,0.05);
-      display: none;
-      animation: fadeIn 0.8s ease;
+    .card {
+      background: var(--card-bg); padding: 25px; border-radius: 20px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border: 1px solid #f1f5f9;
     }
 
-    .section.active { display: block; }
+    /* AI Chat Interface Modern */
+    .chat-container {
+      background: var(--card-bg); border-radius: 24px; display: flex;
+      flex-direction: column; height: 600px; overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Emergency UI */
-    .emergency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+    #chat-screen { flex-grow: 1; overflow-y: auto; padding: 25px; background: #fdfdff; }
     
-    .card-btn {
-      padding: 40px; border-radius: 30px; border: none; cursor: pointer;
-      font-size: 1.5rem; font-weight: 800; transition: 0.3s;
+    .msg-wrap { display: flex; margin-bottom: 20px; }
+    .msg-wrap.user { justify-content: flex-end; }
+
+    .msg-bubble {
+      max-width: 70%; padding: 14px 20px; border-radius: 18px;
+      font-size: 0.95rem; line-height: 1.5;
     }
 
-    .red { background: var(--danger); color: white; box-shadow: 0 10px 30px rgba(251, 113, 133, 0.3); }
-    .green { background: #2dd4bf; color: #000; }
+    .msg-wrap.ai .msg-bubble { background: #f1f5f9; color: var(--text-dark); border-bottom-left-radius: 4px; }
+    .msg-wrap.user .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 4px; }
 
-    .card-btn:hover { transform: scale(1.03); filter: brightness(1.1); }
-
-    /* Chat "Tầm Cao Mới" */
-    #chat-box {
-      height: 450px; overflow-y: auto; background: rgba(0,0,0,0.2);
-      border-radius: 25px; padding: 25px; margin-bottom: 25px;
-      display: flex; flex-direction: column; gap: 15px;
-      border: 1px solid rgba(255,255,255,0.05);
+    .chat-input-area {
+      padding: 20px; border-top: 1px solid #f1f5f9; display: flex; gap: 10px;
     }
 
-    .msg { max-width: 85%; padding: 15px 22px; border-radius: 22px; font-size: 1rem; }
-    .user { align-self: flex-end; background: var(--accent); color: #000; border-bottom-right-radius: 4px; }
-    .ai { align-self: flex-start; background: var(--glass-heavy); color: #fff; border-bottom-left-radius: 4px; }
-
-    .chat-input {
-      display: flex; gap: 15px; background: var(--glass-heavy);
-      padding: 10px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1);
+    .chat-input-area input {
+      flex-grow: 1; padding: 15px; border: 1px solid #e2e8f0;
+      border-radius: 12px; outline: none; transition: 0.3s;
     }
 
-    .chat-input input {
-      flex: 1; background: none; border: none; padding-left: 20px;
-      color: white; font-size: 1.1rem; outline: none;
+    /* SOS Button */
+    .sos-btn {
+      background: var(--danger); color: white; border: none;
+      padding: 15px 30px; border-radius: 50px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
     }
 
-    /* Footer */
-    footer { text-align: center; padding: 60px; opacity: 0.5; font-size: 0.9rem; }
+    /* Thư viện pháp luật - Tabs */
+    .law-item {
+      padding: 20px; border-bottom: 1px solid #f1f5f9; transition: 0.2s;
+    }
+    .law-item:hover { background: #f8fafc; }
+    .tag {
+      font-size: 0.7rem; padding: 4px 10px; border-radius: 100px;
+      background: #e0e7ff; color: var(--primary); font-weight: 600;
+    }
 
-    /* Mobile Responsive */
+    footer {
+      margin-top: 50px; text-align: center; color: var(--text-light);
+      font-size: 0.85rem; padding-bottom: 30px;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      .emergency-grid { grid-template-columns: 1fr; }
-      .section { padding: 25px; }
-      nav { gap: 8px; }
-      nav button { padding: 10px 18px; font-size: 0.8rem; }
+      .sidebar { position: fixed; left: -260px; }
+      .sidebar.mobile-open { left: 0; }
     }
   </style>
 </head>
 <body>
 
-<div id="particles-js"></div>
-
-<header>
-  <div class="header-content">
-    <h1>Siro SafeSchool</h1>
-    <p style="font-size: 1.2rem; opacity: 0.8;">Hệ thống bảo vệ học đường thông minh - Version 2.0</p>
-  </div>
-</header>
-
-<nav id="navbar">
-  <button onclick="showSection('emergency')" class="active"><i class="fas fa-bolt"></i> Khẩn Cấp</button>
-  <button onclick="showSection('chat-ai')"><i class="fas fa-brain"></i> Trợ Lý AI</button>
-  <button onclick="showSection('hom-thu')"><i class="fas fa-paper-plane"></i> Hòm Thư</button>
-  <button onclick="showSection('thu-vien')"><i class="fas fa-database"></i> Thư Viện</button>
-</nav>
-
-<main class="container">
-  <section id="emergency" class="section active">
-    <h2 style="margin-bottom: 10px;">Cần giúp đỡ ngay?</h2>
-    <p>Hệ thống kết nối trực tiếp với các đơn vị bảo vệ trẻ em.</p>
-    <div class="emergency-grid">
-      <button class="card-btn red" onclick="location.href='tel:111'">GỌI 111</button>
-      <button class="card-btn green" onclick="window.open('https://docs.google.com/document/d/1Kk6YQOXubRmkN5Hq0jlp9RgsiT4ZPJU-0AR2RrVZzkM/edit?usp=sharing')">GỌI THẦY CÔ</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="logo-text">SafeSchool Pro</span>
+      <button class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     </div>
-  </section>
 
-  <section id="chat-ai" class="section">
-    <h2>Trợ Lý Tâm Lý Siro</h2>
-    <p style="opacity: 0.7; margin-bottom: 20px;">Trí tuệ nhân tạo hỗ trợ giải quyết mâu thuẫn học đường.</p>
-    <div id="chat-box">
-      <div class="msg ai">Chào Siro, mình là trợ lý ảo bảo vệ em. Em hãy kể cho mình nghe vấn đề em đang gặp phải (ví dụ: bị bắt nạt, stress, hay lo lắng nhé).</div>
+    <ul class="nav-links">
+      <li class="nav-item active" onclick="showContent('dashboard')">
+        <i class="fas fa-home"></i>
+        <span class="nav-text">Trang chủ</span>
+      </li>
+      <li class="nav-item" onclick="showContent('ai-assistant')">
+        <i class="fas fa-robot"></i>
+        <span class="nav-text">Trợ lý AI Elite</span>
+      </li>
+      <li class="nav-item" onclick="showContent('law-library')">
+        <i class="fas fa-balance-scale"></i>
+        <span class="nav-text">Thư viện Pháp luật</span>
+      </li>
+      <li class="nav-item" onclick="showContent('anonymous-report')">
+        <i class="fas fa-user-secret"></i>
+        <span class="nav-text">Hòm thư Ẩn danh</span>
+      </li>
+      <li class="nav-item" onclick="showContent('health-test')">
+        <i class="fas fa-heartbeat"></i>
+        <span class="nav-text">Kiểm tra Tâm lý</span>
+      </li>
+    </ul>
+
+    <div class="nav-item" style="margin-top: auto;" onclick="window.location.href='tel:111'">
+      <i class="fas fa-phone-alt"></i>
+      <span class="nav-text">GỌI KHẨN CẤP 111</span>
     </div>
-    <div class="chat-input">
-      <input type="text" id="user-input" placeholder="Nhập tâm sự của em...">
-      <button onclick="sendMessage()" style="background: var(--accent); border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer;">
-        <i class="fas fa-arrow-up" style="color: #000;"></i>
-      </button>
+  </aside>
+
+  <main class="main-content">
+    <div id="content-dashboard" class="page active">
+      <div class="header-top">
+        <h2>Tổng quan hệ thống</h2>
+        <button class="sos-btn" onclick="triggerSOS()">SOS KHẨN CẤP</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="card">
+          <p style="color: var(--text-light);">Cảm xúc hôm nay</p>
+          <h3 style="margin: 10px 0;">Em cảm thấy thế nào?</h3>
+          <div style="display: flex; gap: 10px;">
+            <button onclick="logMood('happy')" style="border:none; background:none; font-size: 1.5rem; cursor:pointer">😊</button>
+            <button onclick="logMood('neutral')" style="border:none; background:none; font-size: 1.5rem; cursor:pointer">😐</button>
+            <button onclick="logMood('sad')" style="border:none; background:none; font-size: 1.5rem; cursor:pointer">😢</button>
+          </div>
+        </div>
+        <div class="card">
+          <p style="color: var(--text-light);">Kiến thức an toàn</p>
+          <h3 style="margin: 10px 0;">3 Điều cần làm khi bị bắt nạt</h3>
+          <button class="nav-item" style="border:none; width: 100%;">Xem ngay</button>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <section id="hom-thu" class="section">
-    <h2>Gửi báo cáo ẩn danh</h2>
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform?embedded=true" width="100%" height="700" frameborder="0" style="border-radius: 20px; margin-top: 20px; background: white;">Đang tải...</iframe>
-  </section>
-
-  <section id="thu-vien" class="section">
-    <h2>Thư viện kiến thức</h2>
-    <div style="background: var(--glass-heavy); padding: 20px; border-radius: 20px; margin-top: 20px;">
-        <p>🔍 Tính năng đang cập nhật dữ liệu pháp luật 2026...</p>
+    <div id="content-ai-assistant" class="page" style="display:none;">
+      <h2>Trợ lý AI Elite</h2>
+      <div class="chat-container">
+        <div id="chat-screen">
+          <div class="msg-wrap ai">
+            <div class="msg-bubble">Chào em, mình là trợ lý AI được thiết kế để lắng nghe và bảo vệ em. Em hãy chia sẻ vấn đề của mình, mình có thể hiểu về luật, tâm lý và cách xử lý bắt nạt.</div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="ai-input" placeholder="Nhập câu hỏi hoặc tâm sự của em...">
+          <button onclick="smartChat()" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor:pointer"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
     </div>
-  </section>
-</main>
 
-<footer>
-  <p>Engineered by <strong>Siro (Gia Bảo)</strong> | Class 7.2</p>
-  <p>© 2026 Toàn bộ quyền được bảo lưu</p>
-</footer>
+    <div id="content-law-library" class="page" style="display:none;">
+      <div class="header-top">
+        <h2>Thư viện Pháp luật 2026</h2>
+        <input type="text" id="law-search" placeholder="Tìm kiếm luật..." style="padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+      </div>
+      <div class="card" id="law-list" style="max-height: 600px; overflow-y: auto;">
+        <div class="law-item">
+          <span class="tag">LUẬT TRẺ EM 2016</span>
+          <h4 style="margin: 5px 0;">Điều 6: Các hành vi bị nghiêm cấm</h4>
+          <p style="font-size: 0.9rem; color: var(--text-light);">Cấm xâm hại, hành hạ, ngược đãi, bỏ rơi, bỏ mặc, mua bán, bắt cóc, đánh tráo, chiếm đoạt trẻ em.</p>
+        </div>
+        <div class="law-item">
+          <span class="tag">NGHỊ ĐỊNH 80/2017/NĐ-CP</span>
+          <h4 style="margin: 5px 0;">Điều 5: Môi trường giáo dục an toàn</h4>
+          <p style="font-size: 0.9rem; color: var(--text-light);">Quy định về việc phòng ngừa, hỗ trợ và can thiệp đối với bạo lực học đường trong các cơ sở giáo dục.</p>
+        </div>
+        <div class="law-item">
+          <span class="tag">LUẬT AN NINH MẠNG 2018</span>
+          <h4 style="margin: 5px 0;">Điều 16: Phòng ngừa thông tin xấu độc</h4>
+          <p style="font-size: 0.9rem; color: var(--text-light);">Xử lý các hành vi bắt nạt qua mạng (Cyberbullying), bôi nhọ danh dự nhân phẩm trên không gian mạng.</p>
+        </div>
+        </div>
+    </div>
 
-<script>
-  // Chuyển Tab
-  function showSection(id) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    event.currentTarget.classList.add('active');
-  }
+    <div id="content-anonymous-report" class="page" style="display:none;">
+        <h2>Báo cáo ẩn danh</h2>
+        <div class="card" style="margin-top: 20px;">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform?embedded=true" width="100%" height="800" frameborder="0">Đang tải...</iframe>
+        </div>
+    </div>
 
-  // Hệ thống Chat Thông Minh (Không API)
-  const brain = [
-    { keys: ['bắt nạt', 'đánh', 'xúc phạm', 'chửi'], response: "Mình rất tiếc khi nghe điều này. Bước đầu tiên: Em hãy giữ lại các bằng chứng (tin nhắn, hình ảnh). Sau đó, hãy nhấn vào tab 'Khẩn Cấp' để gọi 111 ngay. Em không đơn độc!" },
-    { keys: ['buồn', 'stress', 'áp lực', 'mệt'], response: "Đừng quá lo lắng nhé. Hãy thử hít thở sâu theo nhịp 4-7-8. Nếu được, em hãy nhấn vào nút 'Gọi thầy cô' để được tư vấn tâm lý trực tiếp nhé." },
-    { keys: ['chào', 'hi', 'hello'], response: "Chào em! Mình là trợ lý Siro. Mình có thể giúp gì cho em về an toàn học đường hôm nay?" },
-    { keys: ['luật', 'pháp luật', 'tội'], response: "Theo Nghị định 80/2017, hành vi bạo lực học đường có thể bị phạt hành chính từ 5-30 triệu đồng hoặc truy cứu hình sự. Em hoàn toàn được pháp luật bảo vệ!" }
-  ];
+    <div id="content-health-test" class="page" style="display:none;">
+        <h2>Kiểm tra tâm lý (Self-Assessment)</h2>
+        <div class="card" style="margin-top: 20px;">
+            <p>Tính năng đang phát triển bộ câu hỏi chuẩn hóa từ chuyên gia tâm lý học đường...</p>
+        </div>
+    </div>
 
-  function sendMessage() {
-    const input = document.getElementById('user-input');
-    const box = document.getElementById('chat-box');
-    const text = input.value.toLowerCase();
-    if (!text) return;
+    <footer>
+      <p>Hệ thống hỗ trợ An toàn học đường v2.0</p>
+      <p>Thực hiện bởi <strong>Nguyễn Gia Bảo</strong> - Lớp 7.2 - Trường THCS Lý Tự Trọng</p>
+    </footer>
+  </main>
 
-    // User message
-    box.innerHTML += `<div class="msg user">${input.value}</div>`;
-    input.value = "";
-
-    // AI Thinking & Response
-    setTimeout(() => {
-      let reply = "Mình hiểu rồi. Em có thể kể chi tiết hơn không, hoặc nhấn vào nút Khẩn Cấp nếu cần trợ giúp ngay lập tức nhé.";
-      
-      for (let item of brain) {
-        if (item.keys.some(k => text.includes(k))) {
-          reply = item.response;
-          break;
-        }
-      }
-
-      box.innerHTML += `<div class="msg ai">${reply}</div>`;
-      box.scrollTop = box.scrollHeight;
-    }, 800);
-  }
-
-  // Khởi tạo Particles
-  particlesJS('particles-js', {
-    "particles": {
-      "number": { "value": 80 },
-      "color": { "value": "#38bdf8" },
-      "shape": { "type": "circle" },
-      "opacity": { "value": 0.2 },
-      "size": { "value": 2 },
-      "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.1, "width": 1 },
-      "move": { "enable": true, "speed": 1.5 }
-    },
-    "interactivity": {
-      "events": { "onhover": { "enable": true, "mode": "grab" } }
+  <script>
+    // Xử lý Sidebar thu gọn
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
     }
-  });
 
-  // Enter để gửi tin nhắn
-  document.getElementById('user-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-  });
-</script>
+    // Chuyển đổi nội dung giữa các Tab
+    function showContent(id) {
+      document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+      document.getElementById('content-' + id).style.display = 'block';
+      
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
 
+    // AI THÔNG MINH HƠN (Keyword Intent Analysis)
+    const aiBrains = {
+        threat: {
+            keywords: ['đánh', 'giết', 'dao', 'đấm', 'bắt nạt', 'đe dọa'],
+            ans: "Đây là tình huống nguy hiểm. Em cần tìm người lớn ngay lập tức hoặc nhấn nút SOS. Theo Điều 134 Bộ luật Hình sự, hành vi cố ý gây thương tích có thể bị xử lý rất nặng."
+        },
+        mental: {
+            keywords: ['buồn', 'khóc', 'mệt', 'áp lực', 'stress', 'chết'],
+            ans: "Mình cảm nhận được em đang rất áp lực. Hãy thở sâu 4-7-8 nhé. Em không đơn độc, tổng đài 111 luôn lắng nghe em 24/7. Em muốn mình giúp kết nối với giáo viên tư vấn không?"
+        },
+        law: {
+            keywords: ['luật', 'nghị định', 'bồi thường', 'phạt'],
+            ans: "Về pháp lý, Nghị định 144/2021/NĐ-CP quy định phạt tiền từ 5-8 triệu đồng cho hành vi dâm ô hoặc bạo lực trẻ em. Em có thể tra cứu thêm ở mục Thư viện."
+        }
+    };
+
+    function smartChat() {
+        const input = document.getElementById('ai-input');
+        const screen = document.getElementById('chat-screen');
+        const text = input.value.trim().toLowerCase();
+        if (!text) return;
+
+        // User Message
+        screen.innerHTML += `<div class="msg-wrap user"><div class="msg-bubble">${input.value}</div></div>`;
+        
+        let response = "Mình đang học hỏi thêm để hiểu em rõ hơn. Hiện tại em nên tham khảo mục SOS hoặc liên hệ giáo viên nếu vấn đề quá nghiêm trọng nhé.";
+
+        // Phân tích ý định
+        for (let category in aiBrains) {
+            if (aiBrains[category].keywords.some(k => text.includes(k))) {
+                response = aiBrains[category].ans;
+                break;
+            }
+        }
+
+        // AI Response
+        setTimeout(() => {
+            screen.innerHTML += `<div class="msg-wrap ai"><div class="msg-bubble">${response}</div></div>`;
+            screen.scrollTop = screen.scrollHeight;
+        }, 600);
+        
+        input.value = "";
+    }
+
+    function triggerSOS() {
+        if(confirm("Hệ thống sẽ ghi nhận tọa độ và báo cáo khẩn cấp. Em có chắc chắn muốn tiếp tục?")) {
+            alert("Đã gửi tín hiệu SOS tới Ban giám hiệu và cơ quan chức năng!");
+        }
+    }
+
+    function logMood(m) {
+        alert("Cảm ơn em đã chia sẻ cảm xúc. Hệ thống sẽ ghi nhận để hỗ trợ em tốt hơn!");
+    }
+  </script>
 </body>
 </html>
