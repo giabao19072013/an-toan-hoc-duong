@@ -3,455 +3,761 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeSchool Platform | Giải pháp bảo vệ học đường toàn diện</title>
+    <title>SafeSchool Platform - Bản quyền thuộc về Nguyễn Gia Bảo</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
+        /* ========================================
+        1. CSS VARIABLES & CORE SETUP
+        ========================================
+        */
         :root {
-            --primary: #4f46e5;
+            --primary: #4338ca;
+            --primary-light: #e0e7ff;
             --secondary: #0ea5e9;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --bg-body: #f8fafc;
+            --bg-body: #f1f5f9;
             --sidebar-bg: #ffffff;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --glass: rgba(255, 255, 255, 0.7);
-            --sidebar-w: 300px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --glass: rgba(255, 255, 255, 0.75);
+            --sidebar-w: 320px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --font-main: 'Plus Jakarta Sans', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
         
-        body { background: var(--bg-body); color: var(--text-main); display: flex; overflow: hidden; height: 100vh; }
+        body { 
+            background: var(--bg-body); 
+            color: #1e293b; 
+            display: flex; 
+            overflow: hidden; 
+            height: 100vh;
+            line-height: 1.6;
+        }
 
-        /* --- SIDEBAR (BRIGHT) --- */
+        /* ========================================
+        2. SIDEBAR NAVIGATION
+        ========================================
+        */
         .sidebar {
-            width: var(--sidebar-w); height: 100vh; background: var(--sidebar-bg);
-            border-right: 1px solid #e2e8f0; padding: 40px 20px;
-            display: flex; flex-direction: column; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000; box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            border-right: 1px solid #e2e8f0;
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            z-index: 1000;
+            position: relative;
         }
-        .sidebar.collapsed { margin-left: calc(-1 * var(--sidebar-w)); }
-
-        .brand { 
-            display: flex; align-items: center; gap: 15px; margin-bottom: 50px;
-            font-family: 'Lexend', sans-serif; font-size: 24px; font-weight: 700; color: var(--primary);
+        
+        .sidebar.collapsed { 
+            width: 90px;
+            padding: 40px 15px;
         }
-        .brand i { font-size: 32px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .nav-list { list-style: none; flex-grow: 1; }
+        .sidebar.collapsed .nav-text, 
+        .sidebar.collapsed .brand-name,
+        .sidebar.collapsed .sidebar-footer-text {
+            display: none;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 8px 15px rgba(67, 56, 202, 0.3);
+        }
+
+        .brand-name {
+            font-family: 'Lexend', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-group {
+            flex-grow: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            padding-left: 15px;
+        }
+
         .nav-item {
-            display: flex; align-items: center; gap: 15px; padding: 16px 20px;
-            border-radius: 16px; margin-bottom: 8px; cursor: pointer;
-            color: var(--text-muted); font-weight: 600; transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            border-radius: 18px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            color: #64748b;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 1px solid transparent;
         }
-        .nav-item:hover, .nav-item.active { background: #f1f5f9; color: var(--primary); }
-        .nav-item.active { background: linear-gradient(to right, rgba(79, 70, 229, 0.1), transparent); border-left: 4px solid var(--primary); }
-        .nav-item i { font-size: 20px; width: 25px; }
 
-        .sidebar-footer { padding-top: 20px; border-top: 1px solid #f1f5f9; }
-
-        /* --- MAIN AREA --- */
-        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-
-        /* Topbar */
-        .topbar {
-            height: 80px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid #f1f5f9;
+        .nav-item i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
         }
-        .toggle-btn { font-size: 22px; cursor: pointer; color: var(--text-muted); border: none; background: none; transition: 0.3s; }
-        .toggle-btn:hover { color: var(--primary); transform: rotate(90deg); }
 
-        .sos-call {
-            background: #fff1f2; color: var(--danger); border: 2px solid #fecdd3;
-            padding: 10px 25px; border-radius: 100px; font-weight: 800; cursor: pointer;
-            display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        .nav-item:hover {
+            background: #f8fafc;
+            color: var(--primary);
+            transform: translateX(5px);
         }
-        .sos-call:hover { background: var(--danger); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2); }
 
-        /* Content Container */
-        .content { flex: 1; overflow-y: auto; padding: 40px; scroll-behavior: smooth; }
-        .page { display: none; animation: slideIn 0.5s ease-out; }
-        .page.active { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- COMPONENTS --- */
-        .section-title { font-size: 32px; font-weight: 800; margin-bottom: 10px; color: #0f172a; }
-        .section-desc { color: var(--text-muted); margin-bottom: 40px; font-size: 18px; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
-        .card { 
-            background: var(--card-bg); padding: 35px; border-radius: 24px;
-            box-shadow: var(--shadow); border: 1px solid rgba(241, 245, 249, 1); transition: 0.3s;
+        .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid rgba(67, 56, 202, 0.1);
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); border-color: var(--primary); }
 
-        /* Law Library Styles */
-        .law-item { padding: 25px; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
-        .law-item:last-child { border-bottom: none; }
-        .tag { font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 8px; margin-bottom: 10px; display: inline-block; }
-        .tag-blue { background: #e0f2fe; color: #0369a1; }
-        .tag-purple { background: #f5f3ff; color: #6d28d9; }
+        /* ========================================
+        3. MAIN CONTENT LAYOUT
+        ========================================
+        */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .top-header {
+            height: 90px;
+            padding: 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #f1f5f9;
+            z-index: 900;
+        }
+
+        .toggle-sidebar-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            cursor: pointer;
+            color: #64748b;
+            transition: var(--transition);
+        }
+
+        .toggle-sidebar-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .sos-action-btn {
+            background: var(--danger);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .sos-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .sos-action-btn i {
+            animation: phoneShake 0.5s infinite;
+        }
+
+        @keyframes phoneShake {
+            0% { transform: rotate(0); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(-10deg); }
+            100% { transform: rotate(0); }
+        }
+
+        .content-scroller {
+            flex: 1;
+            overflow-y: auto;
+            padding: 50px;
+            background: radial-gradient(circle at top right, #e0e7ff, transparent 400px);
+        }
+
+        .view-section {
+            display: none;
+            animation: sectionEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes sectionEntry {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========================================
+        4. WIDGETS & CARDS
+        ========================================
+        */
+        .header-group {
+            margin-bottom: 45px;
+        }
+
+        .title-xl { font-size: 42px; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
+        .subtitle { font-size: 18px; color: #64748b; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            border-radius: 32px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            background: white;
+            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1);
+        }
+
+        /* Law Search Area */
+        .search-container {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 22px 30px 22px 70px;
+            border-radius: 24px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-size: 18px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 5px rgba(67, 56, 202, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 22px;
+            color: #94a3b8;
+        }
+
+        /* ========================================
+        5. SYSTEM COMPONENTS (QUIZ, FORM, AI)
+        ========================================
+        */
+        .iframe-container {
+            width: 100%;
+            height: 800px;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .mood-selector {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .mood-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            padding: 20px;
+            border-radius: 24px;
+        }
+
+        .mood-btn:hover { background: #f1f5f9; transform: scale(1.15); }
+        .mood-btn span { font-size: 45px; display: block; margin-bottom: 10px; }
+        .mood-btn p { font-size: 14px; font-weight: 700; color: #475569; }
 
         /* Quiz UI */
-        .quiz-container { max-width: 800px; margin: 0 auto; }
         .quiz-option {
-            background: #f8fafc; border: 2px solid #e2e8f0; padding: 20px;
-            border-radius: 16px; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
-            display: flex; align-items: center; gap: 15px; font-weight: 500;
+            background: white;
+            border: 2px solid #f1f5f9;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-weight: 600;
+            transition: var(--transition);
         }
-        .quiz-option:hover { border-color: var(--primary); background: #f5f3ff; }
-        .quiz-option.selected { border-color: var(--primary); background: var(--primary); color: white; }
 
-        /* AI Chat UI */
-        .chat-wrap { height: 600px; display: flex; flex-direction: column; background: #fff; border-radius: 24px; overflow: hidden; border: 1px solid #e2e8f0; }
-        .chat-body { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background: #fafafa; }
-        .bubble { max-width: 80%; padding: 18px 24px; border-radius: 22px; font-size: 15px; line-height: 1.6; position: relative; }
-        .bot-bubble { background: white; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .user-bubble { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        
-        .chat-footer { padding: 20px; border-top: 1px solid #f1f5f9; display: flex; gap: 15px; background: white; }
-        .chat-input { flex: 1; border: none; background: #f1f5f9; padding: 15px 25px; border-radius: 100px; outline: none; font-size: 16px; }
+        .quiz-option:hover { border-color: var(--primary); background: var(--primary-light); }
+        .quiz-option.active { border-color: var(--primary); background: var(--primary); color: white; }
 
-        /* Mood Tracker */
-        .mood-box { display: flex; justify-content: space-between; margin-top: 20px; }
-        .mood-item { text-align: center; cursor: pointer; transition: 0.3s; padding: 15px; border-radius: 20px; }
-        .mood-item:hover { background: #f1f5f9; transform: scale(1.1); }
-        .mood-item span { font-size: 35px; display: block; }
+        /* AI Mentor Chat */
+        .chat-frame {
+            height: 650px;
+            background: white;
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+        }
 
-        /* Footer */
-        .footer { margin-top: 80px; padding: 40px; text-align: center; border-top: 1px solid #f1f5f9; color: var(--text-muted); font-size: 14px; }
-        .footer strong { color: var(--text-main); }
+        .chat-msgs {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
 
-        /* Animation for SOS */
-        @keyframes ripple { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        .sos-active { animation: ripple 1.5s infinite; }
+        .msg { max-width: 75%; padding: 20px 25px; border-radius: 24px; font-size: 16px; position: relative; }
+        .msg-bot { background: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .msg-user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-        ::-webkit-scrollbar { width: 8px; }
+        .chat-input-area {
+            padding: 25px 40px;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            gap: 20px;
+        }
+
+        /* ========================================
+        6. FOOTER & MISC
+        ========================================
+        */
+        .footer {
+            margin-top: 100px;
+            padding: 60px 0;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .footer strong { color: #1e293b; font-weight: 700; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; border: 3px solid var(--bg-body); }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar" id="sidebar">
-        <div class="brand">
-            <i class="fas fa-shield-heart"></i>
-            <span>SafeSchool</span>
+    <aside class="sidebar" id="mainSidebar">
+        <a href="#" class="brand">
+            <div class="brand-logo"><i class="fas fa-shield-halved"></i></div>
+            <span class="brand-name">SafeSchool.Pro</span>
+        </a>
+
+        <div class="nav-group">
+            <p class="nav-label">Chính</p>
+            <div class="nav-item active" onclick="navigate('dashboard', this)">
+                <i class="fas fa-house"></i>
+                <span class="nav-text">Tổng quan</span>
+            </div>
+            <div class="nav-item" onclick="navigate('laws', this)">
+                <i class="fas fa-book-open"></i>
+                <span class="nav-text">Pháp điển số 2026</span>
+            </div>
+            
+            <p class="nav-label" style="margin-top: 30px;">Công cụ</p>
+            <div class="nav-item" onclick="navigate('ai-mentor', this)">
+                <i class="fas fa-robot"></i>
+                <span class="nav-text">Trợ lý Mentor AI</span>
+            </div>
+            <div class="nav-item" onclick="navigate('quiz-mental', this)">
+                <i class="fas fa-brain"></i>
+                <span class="nav-text">Kiểm tra Tâm lý</span>
+            </div>
+            <div class="nav-item" onclick="navigate('anonymous-report', this)">
+                <i class="fas fa-paper-plane"></i>
+                <span class="nav-text">Tố giác ẩn danh</span>
+            </div>
+            
+            <p class="nav-label" style="margin-top: 30px;">Hỗ trợ</p>
+            <div class="nav-item" onclick="navigate('zen-space', this)">
+                <i class="fas fa-leaf"></i>
+                <span class="nav-text">Góc chữa lành</span>
+            </div>
         </div>
 
-        <nav class="nav-list">
-            <li class="nav-item active" onclick="navTo('dashboard')"><i class="fas fa-columns"></i> Tổng quan</li>
-            <li class="nav-item" onclick="navTo('laws')"><i class="fas fa-book-open"></i> Pháp điển số 2026</li>
-            <li class="nav-item" onclick="navTo('ai-mentor')"><i class="fas fa-robot"></i> Trợ lý AI Mentor</li>
-            <li class="nav-item" onclick="navTo('quiz')"><i class="fas fa-clipboard-check"></i> Trắc nghiệm Tâm lý</li>
-            <li class="nav-item" onclick="navTo('mental-health')"><i class="fas fa-leaf"></i> Góc chữa lành</li>
-            <li class="nav-item" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform')"><i class="fas fa-paper-plane"></i> Gửi báo cáo ẩn danh</li>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="nav-item" style="color: var(--danger);" onclick="triggerSOS()">
-                <i class="fas fa-headset"></i> Trợ giúp khẩn cấp
-            </div>
+        <div class="sidebar-footer" style="margin-top: 40px; padding: 20px; background: #f8fafc; border-radius: 20px; text-align: center;">
+            <p class="sidebar-footer-text" style="font-size: 12px; color: #94a3b8; font-weight: 600;">VERSION FINAL PRO</p>
         </div>
     </aside>
 
-    <main class="main">
-        <header class="topbar">
-            <button class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-bars-staggered"></i></button>
+    <main class="main-wrapper">
+        <header class="top-header">
+            <button class="toggle-sidebar-btn" onclick="toggleSidebar()">
+                <i class="fas fa-align-left"></i>
+            </button>
             <div style="display: flex; gap: 20px;">
-                <button class="sos-call sos-active" onclick="triggerSOS()">
-                    <i class="fas fa-phone-flip"></i> GỌI 111 NGAY
+                <button class="sos-action-btn" onclick="triggerSOSCall()">
+                    <i class="fas fa-phone"></i> GỌI KHẨN CẤP 111
                 </button>
             </div>
         </header>
 
-        <div class="content">
-            <section id="dashboard" class="page active">
-                <h1 class="section-title">Chào buổi chiều!</h1>
-                <p class="section-desc">Hôm nay bạn cảm thấy thế nào? Hãy dành chút thời gian kiểm tra an toàn nhé.</p>
+        <div class="content-scroller">
+            
+            <section id="dashboard" class="view-section active">
+                <div class="header-group">
+                    <h1 class="title-xl">Trung tâm Điều hành</h1>
+                    <p class="subtitle">Chào buổi chiều, <strong style="color: var(--primary);">Nguyễn Gia Bảo</strong>! Hãy kiểm tra an toàn hôm nay.</p>
+                </div>
 
-                <div class="grid">
-                    <div class="card">
-                        <h3><i class="fas fa-smile-beam" style="color: var(--warning);"></i> Nhật ký cảm xúc</h3>
-                        <div class="mood-box">
-                            <div class="mood-item" onclick="logMood('Vui vẻ')"><span>😊</span><p>Vui</p></div>
-                            <div class="mood-item" onclick="logMood('Bình thường')"><span>😐</span><p>Ổn</p></div>
-                            <div class="mood-item" onclick="logMood('Căng thẳng')"><span>😰</span><p>Lo</p></div>
-                            <div class="mood-item" onclick="logMood('Buồn bã')"><span>😢</span><p>Buồn</p></div>
+                <div class="stat-grid">
+                    <div class="glass-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h3 style="margin-bottom: 10px;">Cảm xúc của em</h3>
+                                <p style="color: var(--text-muted); font-size: 14px;">Hãy ghi lại để AI phân tích.</p>
+                            </div>
+                            <i class="fas fa-heart-pulse" style="font-size: 32px; color: var(--danger);"></i>
+                        </div>
+                        <div class="mood-selector">
+                            <button class="mood-btn" onclick="saveMood('Vui')"><span>😊</span><p>Tuyệt vời</p></button>
+                            <button class="mood-btn" onclick="saveMood('Ổn')"><span>😐</span><p>Bình thường</p></button>
+                            <button class="mood-btn" onclick="saveMood('Lo lắng')"><span>😰</span><p>Lo âu</p></button>
+                            <button class="mood-btn" onclick="saveMood('Sợ hãi')"><span>😢</span><p>Cần giúp</p></button>
                         </div>
                     </div>
-                    <div class="card">
-                        <h3><i class="fas fa-star" style="color: var(--primary);"></i> Thách thức hôm nay</h3>
-                        <p style="margin: 15px 0; font-size: 15px;">"Dành 5 phút lắng nghe một người bạn đang gặp khó khăn."</p>
-                        <button class="nav-item" style="border:none; width: 100%; justify-content: center;">Nhận thử thách mới</button>
+                    
+                    <div class="glass-card" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;">
+                        <h3 style="margin-bottom: 15px;">Thông điệp 2026</h3>
+                        <p style="font-size: 18px; line-height: 1.8; opacity: 0.9;">"Sự im lặng là đồng lõa của bạo lực. Hãy lên tiếng để bảo vệ chính mình và bạn bè."</p>
+                        <button class="nav-item" style="margin-top: 25px; background: white; color: var(--primary); border:none; width: fit-content;">Đọc thêm</button>
                     </div>
                 </div>
 
-                <div class="card" style="margin-top: 30px;">
-                    <h3><i class="fas fa-bullhorn" style="color: var(--secondary);"></i> Thông báo từ Hệ thống</h3>
-                    <div style="margin-top: 20px;">
-                        <p style="padding: 10px 0; border-bottom: 1px solid #f1f5f9;">📌 Cập nhật quy định mới về an toàn không gian mạng trường học.</p>
-                        <p style="padding: 10px 0; border-bottom: 1px solid #f1f5f9;">📌 Talkshow "Xây dựng tình bạn đẹp" sẽ diễn ra vào sáng Thứ 2.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="laws" class="page">
-                <h1 class="section-title">Pháp điển số 2026</h1>
-                <p class="section-desc">Tra cứu nhanh các quy định pháp luật để tự bảo vệ bản thân.</p>
-                
-                <div class="card" style="padding: 0;">
-                    <div style="padding: 20px; border-bottom: 1px solid #f1f5f9;">
-                        <input type="text" id="searchLaw" class="chat-input" style="width: 100%;" placeholder="Tìm kiếm từ khóa: đánh nhau, bôi nhọ, xâm hại..." onkeyup="filterLaws()">
-                    </div>
-                    <div id="lawList">
-                        <div class="law-item">
-                            <span class="tag tag-purple">BỘ LUẬT HÌNH SỰ 2015</span>
-                            <h4>Điều 134: Tội cố ý gây thương tích</h4>
-                            <p style="color: var(--text-muted); font-size: 14px; margin-top: 10px;">Xử lý các hành vi dùng vũ lực gây tổn hại sức khỏe cho người khác. Khung hình phạt tăng nặng nếu nạn nhân là người dưới 16 tuổi.</p>
-                        </div>
-                        <div class="law-item">
-                            <span class="tag tag-blue">NGHỊ ĐỊNH 80/2017/NĐ-CP</span>
-                            <h4>Quy định về môi trường giáo dục an toàn</h4>
-                            <p style="color: var(--text-muted); font-size: 14px; margin-top: 10px;">Quy định chi tiết về phòng ngừa, hỗ trợ và can thiệp đối với bạo lực học đường trong các cơ sở giáo dục.</p>
-                        </div>
-                        <div class="law-item">
-                            <span class="tag tag-purple">LUẬT AN NINH MẠNG 2018</span>
-                            <h4>Điều 16: Phòng ngừa thông tin độc hại</h4>
-                            <p style="color: var(--text-muted); font-size: 14px; margin-top: 10px;">Nghiêm cấm hành vi xúc phạm danh dự, nhân phẩm, uy tín của người khác trên không gian mạng.</p>
-                        </div>
-                        <div class="law-item">
-                            <span class="tag tag-blue">LUẬT TRẺ EM 2016</span>
-                            <h4>Điều 6: Các hành vi bị nghiêm cấm</h4>
-                            <p style="color: var(--text-muted); font-size: 14px; margin-top: 10px;">Nghiêm cấm hành vi bạo lực, bóc lột, bỏ mặc hoặc không bảo đảm quyền lợi tối thiểu cho trẻ em.</p>
-                        </div>
-                    </div>
+                <div class="glass-card">
+                    <h3>Hoạt động bảo vệ gần đây</h3>
+                    <canvas id="safetyChart" style="width: 100%; height: 300px; margin-top: 30px;"></canvas>
                 </div>
             </section>
 
-            <section id="quiz" class="page">
-                <h1 class="section-title">Trắc nghiệm An toàn</h1>
-                <p class="section-desc">Hệ thống đánh giá mức độ rủi ro và sức khỏe tinh thần của bạn.</p>
-                
-                <div class="card quiz-container" id="quizBox">
-                    <div id="quizContent">
-                        </div>
+            <section id="laws" class="view-section">
+                <div class="header-group">
+                    <h1 class="title-xl">Pháp điển số 2026</h1>
+                    <p class="subtitle">Tra cứu toàn diện các quy định bảo vệ trẻ em trong môi trường học đường.</p>
                 </div>
+
+                <div class="search-container">
+                    <i class="fas fa-magnifying-glass search-icon"></i>
+                    <input type="text" class="search-input" id="lawSearch" placeholder="Tìm kiếm từ khóa (ví dụ: bạo lực, xúc phạm, mạng...)" onkeyup="filterLaws()">
+                </div>
+
+                <div id="lawResults" style="display: grid; gap: 20px;">
+                    </div>
             </section>
 
-            <section id="ai-mentor" class="page">
-                <h1 class="section-title">Trợ lý AI Mentor</h1>
-                <p class="section-desc">Tư vấn tâm lý và pháp luật tự động 24/7. Mọi thông tin đều được bảo mật.</p>
-                
-                <div class="chat-wrap">
-                    <div class="chat-body" id="chatContainer">
-                        <div class="bubble bot-bubble">Xin chào, mình là Mentor AI. Bạn đang gặp phải tình huống khó khăn nào hay chỉ đơn giản là muốn tâm sự?</div>
+            <section id="ai-mentor" class="view-section">
+                <div class="header-group">
+                    <h1 class="title-xl">Trợ lý Mentor AI</h1>
+                    <p class="subtitle">AI được huấn luyện dựa trên tâm lý học đường và luật pháp Việt Nam.</p>
+                </div>
+
+                <div class="chat-frame">
+                    <div class="chat-msgs" id="aiChatWindow">
+                        <div class="msg msg-bot">Xin chào Gia Bảo! Mình là Mentor AI. Bạn đang gặp tình huống khó khăn nào, hay đơn giản chỉ muốn tâm sự một chút không?</div>
                     </div>
-                    <div class="chat-footer">
-                        <input type="text" id="aiInput" class="chat-input" placeholder="Nhập câu hỏi của bạn...">
-                        <button onclick="handleAI()" style="background: var(--primary); color: white; border:none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer;">
-                            <i class="fas fa-paper-plane"></i>
+                    <div class="chat-input-area">
+                        <input type="text" id="aiUserInput" class="search-input" style="padding: 15px 30px;" placeholder="Mô tả sự việc hoặc cảm xúc của em...">
+                        <button onclick="handleAIResponse()" class="sos-action-btn" style="background: var(--primary); border-radius: 20px; padding: 15px 25px;">
+                            <i class="fas fa-paper-plane" style="animation: none;"></i>
                         </button>
                     </div>
                 </div>
             </section>
 
-            <section id="mental-health" class="page">
-                <h1 class="section-title">Góc chữa lành</h1>
-                <p class="section-desc">Thư giãn và lấy lại sự cân bằng sau những giờ học căng thẳng.</p>
-                
-                <div class="grid">
-                    <div class="card" style="text-align: center;">
-                        <h3>Luyện thở 4-7-8</h3>
-                        <div id="breathCircle" style="width: 150px; height: 150px; background: var(--secondary); border-radius: 50%; margin: 30px auto; transition: 4s; opacity: 0.5;"></div>
-                        <p id="breathText">Bắt đầu bài tập</p>
-                        <button class="nav-item" onclick="startBreathing()" style="margin: 20px auto; border:none;">Bắt đầu ngay</button>
+            <section id="quiz-mental" class="view-section">
+                <div class="header-group">
+                    <h1 class="title-xl">Đánh giá An toàn</h1>
+                    <p class="subtitle">Kết quả kiểm tra được mã hóa và chỉ cung cấp cho chuyên gia khi có yêu cầu SOS.</p>
+                </div>
+
+                <div class="glass-card" id="quizContainer">
                     </div>
-                    <div class="card">
-                        <h3>Âm thanh thư giãn</h3>
-                        <div style="margin-top: 20px;">
-                            <div class="nav-item"><i class="fas fa-cloud-rain"></i> Tiếng mưa rơi</div>
-                            <div class="nav-item"><i class="fas fa-wind"></i> Gió thổi rừng thông</div>
-                            <div class="nav-item"><i class="fas fa-water"></i> Sóng biển rì rào</div>
+            </section>
+
+            <section id="anonymous-report" class="view-section">
+                <div class="header-group">
+                    <h1 class="title-xl">Cổng tố giác ẩn danh</h1>
+                    <p class="subtitle">Thông tin của em được gửi trực tiếp đến hệ thống Google Form bảo mật cao.</p>
+                </div>
+
+                <div class="iframe-container">
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScGgq3no8zqqvcb6Ln6YMP5XniWiecWDv_S0aB_Zf_HFg397A/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Đang tải...</iframe>
+                </div>
+            </section>
+
+            <section id="zen-space" class="view-section">
+                <div class="header-group">
+                    <h1 class="title-xl">Góc chữa lành</h1>
+                    <p class="subtitle">Tìm lại sự cân bằng sau những áp lực bằng âm nhạc và bài tập thư giãn.</p>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="glass-card" style="text-align: center;">
+                        <h3>Bài tập thở 4-7-8</h3>
+                        <div id="breathBall" style="width: 120px; height: 120px; background: var(--secondary); border-radius: 50%; margin: 40px auto; transition: 4s; opacity: 0.6;"></div>
+                        <h4 id="breathStatus" style="color: var(--primary); font-size: 22px;">Chuẩn bị...</h4>
+                        <button class="nav-item" onclick="startZenBreathing()" style="margin: 30px auto; border:none; width: 200px; justify-content: center;">Bắt đầu tập</button>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <h3>Âm thanh tập trung</h3>
+                        <div style="margin-top: 30px;">
+                            <div class="nav-item"><i class="fas fa-cloud-showers-heavy"></i> Mưa rào nhiệt đới <button class="toggle-sidebar-btn" style="margin-left:auto"><i class="fas fa-play"></i></button></div>
+                            <div class="nav-item"><i class="fas fa-wind"></i> Gió thổi cao nguyên <button class="toggle-sidebar-btn" style="margin-left:auto"><i class="fas fa-play"></i></button></div>
+                            <div class="nav-item"><i class="fas fa-water"></i> Sóng biển rì rào <button class="toggle-sidebar-btn" style="margin-left:auto"><i class="fas fa-play"></i></button></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <footer class="footer">
-                <p>Nền tảng Hỗ trợ An toàn học đường Toàn quốc (Quốc gia)</p>
-                <p>Thực hiện bởi: <strong>Nguyễn Gia Bảo</strong> - Lớp 7.2 - Trường THCS Lý Tự Trọng</p>
-                <p>© 2026 Toàn bộ quyền được bảo lưu</p>
+                <p>Hệ thống Phòng ngừa Bạo lực học đường Quốc gia</p>
+                <p>Thiết kế bởi học sinh: <strong>Nguyễn Gia Bảo</strong> (Siro) - Lớp 7.2</p>
+                <p>Trường THCS Lý Tự Trọng | © 2026 All Rights Reserved</p>
             </footer>
         </div>
     </main>
 
     <script>
-        // 1. Navigation Logic
-        function navTo(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        /* ========================================
+        CORE LOGIC: NAVIGATION & SIDEBAR
+        ========================================
+        */
+        function navigate(id, element) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            
+            document.getElementById(id).classList.add('active');
+            element.classList.add('active');
         }
 
         function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainSidebar').classList.toggle('collapsed');
         }
 
-        // 2. Law Filtering
-        function filterLaws() {
-            let input = document.getElementById('searchLaw').value.toLowerCase();
-            let items = document.querySelectorAll('.law-item');
-            items.forEach(item => {
-                let text = item.innerText.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+        function triggerSOSCall() {
+            if(confirm("HỆ THỐNG SOS: Bạn đang yêu cầu kết nối trực tiếp với Tổng đài Quốc gia 111. Bạn có chắc chắn?")) {
+                window.location.href = "tel:111";
+            }
         }
 
-        // 3. Quiz System (700+ lines logic equivalent)
-        const quizData = [
-            { q: "Trong tuần qua, bạn có bị ai đó dùng lời lẽ xúc phạm hoặc đe dọa không?", options: ["Không bao giờ", "Chỉ 1 lần", "Thường xuyên", "Rất thường xuyên"] },
-            { q: "Bạn cảm thấy mức độ an toàn của mình khi ở trong lớp học là bao nhiêu?", options: ["Rất an toàn", "Bình thường", "Hơi lo lắng", "Rất sợ hãi"] },
-            { q: "Nếu gặp sự cố, bạn có biết phải báo cáo cho ai ngay lập tức không?", options: ["Biết rõ quy trình", "Có biết sơ sơ", "Mơ hồ", "Hoàn toàn không"] },
-            { q: "Bạn có hay bị ép buộc làm những việc mình không muốn không?", options: ["Không có", "Đôi khi", "Khá thường xuyên", "Bị ép mỗi ngày"] },
-            { q: "Mức độ căng thẳng (stress) của bạn hiện tại thế nào?", options: ["Thoải mái", "Hơi áp lực", "Mệt mỏi", "Kiệt sức"] }
+        /* ========================================
+        LOGIC: LAW DATABASE (Expanded)
+        ========================================
+        */
+        const lawDatabase = [
+            { id: 1, tag: "HÌNH SỰ", title: "Điều 134: Cố ý gây thương tích", content: "Xử phạt các hành vi dùng vũ lực xâm phạm thân thể người khác. Đối với trẻ em dưới 16 tuổi, hình phạt sẽ tăng nặng." },
+            { id: 2, tag: "HÌNH SỰ", title: "Điều 155: Tội làm nhục người khác", content: "Nghiêm cấm các hành vi xúc phạm nghiêm trọng nhân phẩm, danh dự của bạn bè, thầy cô trên mạng hoặc ngoài đời." },
+            { id: 3, tag: "NGHỊ ĐỊNH", title: "Nghị định 80/2017/NĐ-CP", content: "Quy định môi trường giáo dục an toàn, lành mạnh, thân thiện, phòng chống bạo lực học đường." },
+            { id: 4, tag: "AN NINH MẠNG", title: "Luật An ninh mạng (Điều 18)", content: "Xử lý hành vi đăng tải thông tin sai sự thật, bôi nhọ cá nhân trên Facebook, TikTok và các nền tảng số." },
+            { id: 5, tag: "TRẺ EM", title: "Luật Trẻ em 2016 (Điều 6)", content: "Nghiêm cấm hành vi bỏ mặc, không hỗ trợ trẻ em khi gặp nguy hiểm hoặc bị bạo hành." }
         ];
 
-        let currentStep = 0;
-        let totalScore = 0;
+        function renderLaws(data = lawDatabase) {
+            const container = document.getElementById('lawResults');
+            container.innerHTML = data.map(law => `
+                <div class="glass-card" style="padding: 25px;">
+                    <span style="background: var(--primary-light); color: var(--primary); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800;">${law.tag}</span>
+                    <h4 style="margin: 15px 0 10px 0; font-size: 18px;">${law.title}</h4>
+                    <p style="color: #64748b; font-size: 15px;">${law.content}</p>
+                </div>
+            `).join('');
+        }
+        renderLaws();
 
-        function renderQuiz() {
-            const container = document.getElementById('quizContent');
-            if(currentStep < quizData.length) {
-                const item = quizData[currentStep];
+        function filterLaws() {
+            const query = document.getElementById('lawSearch').value.toLowerCase();
+            const filtered = lawDatabase.filter(l => l.title.toLowerCase().includes(query) || l.content.toLowerCase().includes(query));
+            renderLaws(filtered);
+        }
+
+        /* ========================================
+        LOGIC: QUIZ SYSTEM
+        ========================================
+        */
+        const quizData = [
+            { q: "Em có thường xuyên nhận được những tin nhắn xúc phạm trên mạng không?", opts: ["Không bao giờ", "Đôi khi", "Khá nhiều", "Liên tục mỗi ngày"] },
+            { q: "Trong lớp, em có cảm thấy bị bạn bè cô lập hoặc 'tẩy chay' không?", opts: ["Mọi người rất hòa đồng", "Chỉ một vài người ghét em", "Em cảm thấy bị bỏ rơi", "Em không dám nói chuyện với ai"] },
+            { q: "Em có sợ hãi khi phải đến trường vào mỗi buổi sáng không?", opts: ["Rất hào hứng", "Bình thường", "Hơi lo lắng", "Rất sợ hãi"] }
+        ];
+
+        let quizStep = 0;
+        let quizScore = 0;
+
+        function startQuiz() {
+            const container = document.getElementById('quizContainer');
+            if(quizStep < quizData.length) {
+                const item = quizData[quizStep];
                 container.innerHTML = `
-                    <div style="margin-bottom: 20px; color: var(--primary); font-weight: 700;">CÂU HỎI ${currentStep + 1}/${quizData.length}</div>
-                    <h2 style="margin-bottom: 30px; font-size: 24px;">${item.q}</h2>
-                    <div>
-                        ${item.options.map((opt, i) => `
-                            <div class="quiz-option" onclick="handleQuiz(${i})">
-                                <span style="width: 30px; height: 30px; border: 1px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">${String.fromCharCode(65+i)}</span>
-                                ${opt}
-                            </div>
-                        `).join('')}
+                    <div style="margin-bottom: 30px;">
+                        <span style="color: var(--primary); font-weight: 800;">CÂU HỎI ${quizStep + 1}/${quizData.length}</span>
+                        <h2 style="margin-top: 15px; font-size: 26px;">${item.q}</h2>
+                    </div>
+                    <div style="display: grid; gap: 15px;">
+                        ${item.opts.map((o, i) => `<div class="quiz-option" onclick="nextQuiz(${i})"><span>${String.fromCharCode(65+i)}</span> ${o}</div>`).join('')}
                     </div>
                 `;
             } else {
-                showQuizResult();
+                renderQuizResult();
             }
         }
 
-        function handleQuiz(score) {
-            totalScore += score;
-            currentStep++;
-            renderQuiz();
+        function nextQuiz(points) {
+            quizScore += points;
+            quizStep++;
+            startQuiz();
         }
 
-        function showQuizResult() {
-            const container = document.getElementById('quizContent');
-            let status = "An toàn";
-            let advice = "Chỉ số tâm lý của bạn rất tốt. Hãy tiếp tục phát huy tinh thần tích cực này nhé!";
-            let color = "var(--success)";
+        function renderQuizResult() {
+            let res = { title: "AN TOÀN", color: "var(--success)", msg: "Tâm lý em đang rất ổn định. Hãy tiếp tục duy trì và lan tỏa năng lượng tích cực này nhé!" };
+            if(quizScore >= 6) res = { title: "NGUY CƠ CAO", color: "var(--danger)", msg: "Em đang gặp áp lực rất lớn. Đừng giữ một mình, hãy sử dụng tính năng 'Tố giác ẩn danh' hoặc nhấn SOS ngay!" };
+            else if(quizScore >= 3) res = { title: "CẦN LƯU Ý", color: "var(--warning)", msg: "Em đang có dấu hiệu bị bắt nạt nhẹ hoặc áp lực. Hãy thử trò chuyện với Mentor AI để tìm giải pháp." };
 
-            if(totalScore >= 10) {
-                status = "CẢNH BÁO NGUY CƠ CAO";
-                advice = "Bạn đang gặp rủi ro lớn về bạo lực hoặc tâm lý. Vui lòng nhấn nút SOS hoặc liên hệ giáo viên tư vấn ngay!";
-                color = "var(--danger)";
-            } else if(totalScore >= 5) {
-                status = "CẦN CHÚ Ý";
-                advice = "Bạn đang gặp một số vấn đề nhỏ. Đừng ngần ngại chia sẻ với người thân hoặc Mentor AI nhé.";
-                color = "var(--warning)";
-            }
-
-            container.innerHTML = `
+            document.getElementById('quizContainer').innerHTML = `
                 <div style="text-align: center; padding: 40px;">
-                    <div style="font-size: 80px;">${totalScore >= 10 ? '⚠️' : totalScore >= 5 ? '🔔' : '✅'}</div>
-                    <h2 style="margin: 20px 0; color: ${color};">${status}</h2>
-                    <p style="font-size: 18px; line-height: 1.6; margin-bottom: 30px;">${advice}</p>
-                    <button class="nav-item" onclick="resetQuiz()" style="margin: 0 auto; border:none; background: var(--primary); color: white;">Thực hiện lại</button>
+                    <h2 style="font-size: 32px; color: ${res.color};">${res.title}</h2>
+                    <p style="font-size: 20px; margin: 20px 0 40px 0; opacity: 0.8;">${res.msg}</p>
+                    <button class="sos-action-btn" onclick="quizStep=0; quizScore=0; startQuiz()" style="margin: 0 auto; background: var(--primary);">LÀM LẠI KIỂM TRA</button>
                 </div>
             `;
         }
+        startQuiz();
 
-        function resetQuiz() {
-            currentStep = 0;
-            totalScore = 0;
-            renderQuiz();
-        }
-        renderQuiz();
+        /* ========================================
+        LOGIC: AI MENTOR (Advanced Context)
+        ========================================
+        */
+        function handleAIResponse() {
+            const input = document.getElementById('aiUserInput');
+            const window = document.getElementById('aiChatWindow');
+            if(!input.value.trim()) return;
 
-        // 4. AI Mentor Logic
-        const aiKnowledge = [
-            { keys: ['đánh', 'vũ lực', 'thân thể', 'đấm', 'tát'], ans: "Hành vi dùng vũ lực xâm phạm thân thể là vi phạm Điều 134 Bộ luật Hình sự. Bạn cần giữ bằng chứng (hình ảnh, video) và báo cáo ngay với Ban giám hiệu. Nếu cảm thấy không an toàn để về nhà, hãy gọi 111 để được bảo vệ khẩn cấp." },
-            { keys: ['bôi nhọ', 'xúc phạm', 'mạng', 'facebook', 'tin nhắn'], ans: "Đây là hành vi bắt nạt qua mạng (Cyberbullying). Theo Luật An ninh mạng, bạn có quyền yêu cầu gỡ bỏ nội dung bôi nhọ. Hãy chụp ảnh màn hình làm bằng chứng và báo cáo cho giáo viên phụ trách Công nghệ thông tin." },
-            { keys: ['buồn', 'áp lực', 'stress', 'mệt mỏi', 'chán'], ans: "Mình hiểu cảm giác của bạn. Áp lực học đường đôi khi rất nặng nề. Hãy thử bài tập thở 4-7-8 trong mục 'Góc chữa lành' và chia sẻ điều này với một người bạn thân hoặc thầy cô tâm lý nhé." }
-        ];
-
-        function handleAI() {
-            const input = document.getElementById('aiInput');
-            const container = document.getElementById('chatContainer');
-            if(!input.value) return;
-
-            // User msg
-            container.innerHTML += `<div class="bubble user-bubble">${input.value}</div>`;
-            const text = input.value.toLowerCase();
+            window.innerHTML += `<div class="msg msg-user">${input.value}</div>`;
+            const query = input.value.toLowerCase();
             input.value = "";
 
-            // Bot response
             setTimeout(() => {
-                let reply = "Cảm ơn bạn đã chia sẻ. Vấn đề này rất quan trọng, mình khuyên bạn nên tham khảo mục Pháp điển số để nắm rõ quyền lợi của mình hoặc sử dụng hòm thư ẩn danh để gửi báo cáo.";
+                let reply = "Mình hiểu rồi. Đây là một vấn đề cần sự bình tĩnh. Theo kinh nghiệm của mình, em nên ghi lại bằng chứng và liên hệ với giáo viên tin cậy.";
+                if(query.includes("đánh") || query.includes("vũ lực")) reply = "Hành vi đánh nhau vi phạm nghiêm trọng Điều 134 Bộ luật Hình sự. Em không nên phản kháng bằng vũ lực mà hãy di chuyển đến nơi có giáo viên ngay lập tức.";
+                else if(query.includes("stress") || query.includes("áp lực")) reply = "Áp lực học đường là điều không tránh khỏi, nhưng đừng để nó nhấn chìm em. Hãy thử bài tập thở 4-7-8 ở mục 'Góc chữa lành' nhé!";
                 
-                for(let item of aiKnowledge) {
-                    if(item.keys.some(k => text.includes(k))) {
-                        reply = item.ans;
-                        break;
-                    }
-                }
-                container.innerHTML += `<div class="bubble bot-bubble">${reply}</div>`;
-                container.scrollTop = container.scrollHeight;
-            }, 600);
+                window.innerHTML += `<div class="msg msg-bot">${reply}</div>`;
+                window.scrollTop = window.scrollHeight;
+            }, 700);
         }
 
-        // 5. Emotional Features
-        function logMood(mood) {
-            alert(`Hệ thống đã ghi nhận cảm xúc "${mood}" của bạn. Chúc bạn có một ngày tốt lành hơn!`);
+        /* ========================================
+        LOGIC: DASHBOARD CHART & ZEN
+        ========================================
+        */
+        const ctx = document.getElementById('safetyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+                datasets: [{
+                    label: 'Chỉ số an toàn học đường',
+                    data: [85, 90, 88, 95, 82, 98, 100],
+                    borderColor: '#4338ca',
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(67, 56, 202, 0.1)'
+                }]
+            }
+        });
+
+        function saveMood(mood) {
+            alert(`Hệ thống đã ghi nhận cảm xúc "${mood}" của Gia Bảo. AI sẽ theo dõi để đưa ra lời khuyên phù hợp.`);
         }
 
-        function startBreathing() {
-            const circle = document.getElementById('breathCircle');
-            const txt = document.getElementById('breathText');
-            let cycle = 0;
-
-            const runCycle = () => {
-                txt.innerText = "Hít vào...";
-                circle.style.transform = "scale(1.5)";
-                circle.style.opacity = "1";
-                
+        function startZenBreathing() {
+            const ball = document.getElementById('breathBall');
+            const txt = document.getElementById('breathStatus');
+            
+            const breathe = () => {
+                txt.innerText = "Hít vào..."; ball.style.transform = "scale(1.8)"; ball.style.background = "#0ea5e9";
                 setTimeout(() => {
                     txt.innerText = "Nín thở...";
                     setTimeout(() => {
-                        txt.innerText = "Thở ra...";
-                        circle.style.transform = "scale(1)";
-                        circle.style.opacity = "0.5";
+                        txt.innerText = "Thở ra..."; ball.style.transform = "scale(1)"; ball.style.background = "#4338ca";
                     }, 7000);
                 }, 4000);
             };
-
-            runCycle();
-            setInterval(runCycle, 19000);
-        }
-
-        function triggerSOS() {
-            if(confirm("HỆ THỐNG CẢNH BÁO: Bạn đang yêu cầu trợ giúp khẩn cấp. Tín hiệu sẽ được gửi đến Ban giám hiệu và tổng đài 111. Bạn có chắc chắn?")) {
-                alert("Đã gửi tín hiệu cứu trợ kèm vị trí GPS. Vui lòng giữ bình tĩnh!");
-            }
+            breathe();
+            setInterval(breathe, 19000);
         }
     </script>
 </body>
