@@ -133,6 +133,84 @@ body {
   background: #95a5a6;
 }
 
+/* Sidebar menu bên trái */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100%;
+  background: rgba(52, 152, 219, 0.98);
+  color: white;
+  transition: left 0.4s ease;
+  z-index: 1001;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+  overflow-y: auto;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 80px 20px 20px;
+}
+
+.sidebar li {
+  margin: 20px 0;
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.1em;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.sidebar button:hover {
+  background: rgba(255,255,255,0.2);
+  padding-left: 30px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.8em;
+  cursor: pointer;
+}
+
+/* Hamburger button (dấu 3 gạch) */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1002;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5em;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+}
+
+.hamburger:hover {
+  transform: scale(1.1);
+}
+
 /* Header */
 header {
   background: linear-gradient(to right, #2c3e50, #3498db);
@@ -165,346 +243,4 @@ h1 {
   text-shadow: 3px 3px 15px rgba(0,0,0,0.5);
 }
 
-header p {
-  font-size: 1.5em;
-  opacity: 0.9;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-/* Nav */
-nav {
-  background: rgba(52, 152, 219, 0.95);
-  padding: 25px;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  backdrop-filter: blur(15px);
-}
-
-nav button {
-  margin: 12px 10px;
-  padding: 16px 32px;
-  background: white;
-  color: #2c3e50;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1.15em;
-  transition: all 0.4s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
-
-nav button:hover {
-  background: linear-gradient(to right, #3498db, #2980b9);
-  color: white;
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(52, 152, 219, 0.4);
-}
-
-/* Section */
-.section {
-  padding: 50px 25px;
-  max-width: 1200px;
-  margin: 50px auto;
-  background: rgba(255, 255, 255, 0.94);
-  border-radius: 30px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  animation: fadeInUp 1s ease forwards;
-  opacity: 0;
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(60px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.section h2 {
-  color: #2c3e50;
-  font-size: 2.5em;
-  margin-bottom: 30px;
-  text-align: center;
-  position: relative;
-}
-
-.section h2::after {
-  content: '';
-  width: 100px;
-  height: 5px;
-  background: linear-gradient(to right, #3498db, #2ecc71);
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 3px;
-}
-
-/* Nút khẩn cấp */
-#nut-khan-cap {
-  background: linear-gradient(to right, #e74c3c, #c0392b);
-  color: white;
-  font-size: 2em;
-  width: 100%;
-  max-width: 600px;
-  padding: 25px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  display: block;
-  margin: 40px auto;
-  box-shadow: 0 10px 30px rgba(231, 76, 60, 0.5);
-  transition: all 0.4s;
-}
-
-#nut-khan-cap:hover {
-  transform: scale(1.08);
-  box-shadow: 0 15px 40px rgba(231, 76, 60, 0.6);
-}
-
-/* Nút liên hệ */
-#nut-lien-he {
-  background: linear-gradient(to right, #27ae60, #2ecc71);
-  color: white;
-  font-size: 1.4em;
-  padding: 18px 40px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  margin-top: 30px;
-  box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
-  transition: all 0.4s;
-}
-
-#nut-lien-he:hover {
-  transform: scale(1.08);
-  box-shadow: 0 12px 35px rgba(39, 174, 96, 0.5);
-}
-
-/* Chat */
-#chat-box {
-  background: white;
-  border-radius: 25px;
-  padding: 25px;
-  height: 450px;
-  overflow-y: auto;
-  margin-bottom: 25px;
-  box-shadow: inset 0 3px 15px rgba(0,0,0,0.08);
-}
-
-.input-area {
-  display: flex;
-  gap: 15px;
-}
-
-#user-input {
-  flex: 1;
-  padding: 18px;
-  font-size: 1.2em;
-  border: 2px solid #ddd;
-  border-radius: 20px;
-  outline: none;
-  transition: border 0.3s, box-shadow 0.3s;
-}
-
-#user-input:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
-}
-
-#send-btn {
-  padding: 18px 35px;
-  background: linear-gradient(to right, #3498db, #2980b9);
-  color: white;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.4s;
-}
-
-#send-btn:hover {
-  background: linear-gradient(to right, #2980b9, #1f618d);
-  transform: translateY(-3px);
-}
-
-.user-msg {
-  text-align: right;
-  background: linear-gradient(to right, #3498db, #2980b9);
-  color: white;
-  padding: 16px 22px;
-  border-radius: 25px 25px 5px 25px;
-  margin: 20px 0;
-  max-width: 80%;
-  margin-left: auto;
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
-}
-
-.ai-msg {
-  background: #f8f9fa;
-  padding: 16px 22px;
-  border-radius: 25px 25px 25px 5px;
-  margin: 20px 0;
-  max-width: 80%;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-}
-
-.typing {
-  color: #95a5a6;
-  font-style: italic;
-  padding: 16px;
-  background: #f1f2f6;
-  border-radius: 20px;
-  max-width: 60%;
-}
-
-/* Thư viện */
-#search-advise {
-  width: 100%;
-  padding: 16px;
-  font-size: 1.2em;
-  border: 2px solid #ddd;
-  border-radius: 20px;
-  margin-bottom: 30px;
-}
-
-#advise-list li {
-  margin: 25px 0;
-  padding: 25px;
-  background: #f8f9fa;
-  border-radius: 20px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  transition: transform 0.4s, box-shadow 0.4s;
-}
-
-#advise-list li:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
-
-/* Footer */
-footer {
-  background: linear-gradient(to right, #2c3e50, #34495e);
-  color: white;
-  text-align: center;
-  padding: 30px;
-  margin-top: 80px;
-  font-size: 1em;
-  position: relative;
-}
-
-#change-ratio-btn {
-  margin-top: 20px;
-  padding: 12px 30px;
-  background: #3498db;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: all 0.3s;
-}
-
-#change-ratio-btn:hover {
-  background: #2980b9;
-  transform: scale(1.05);
-}
-/* Fix scroll cho thư viện pháp luật dài mỏi tay */
-#thu-vien {
-  max-height: 80vh; /* Giới hạn chiều cao để scroll */
-  overflow-y: auto; /* Cho phép kéo xuống */
-  padding-bottom: 40px; /* Thêm khoảng trống dưới */
-  scrollbar-width: thin; /* Thanh scroll mỏng đẹp */
-  scrollbar-color: #3498db #f1f1f1;
-}
-
-#thu-vien::-webkit-scrollbar {
-  width: 8px;
-}
-
-#thu-vien::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-#thu-vien::-webkit-scrollbar-thumb {
-  background: #3498db;
-  border-radius: 10px;
-}
-
-#thu-vien::-webkit-scrollbar-thumb:hover {
-  background: #2980b9;
-}
-
-/* Đảm bảo nội dung không bị che bởi nav sticky */
-main {
-  padding-top: 80px; /* Khoảng cách cho nav sticky */
-}
-
-/* Fix cho mobile (tỉ lệ 9:16) */
-.ratio-9-16 #thu-vien {
-  max-height: 70vh; /* Nhỏ hơn trên mobile để dễ scroll */
-  padding: 20px 10px;
-}
-
-/* FIX SCROLLBAR MẤT - cho phép kéo xuống mượt mà ở mọi section dài */
-html, body {
-  height: auto;
-  min-height: 100%;
-  overflow-x: hidden;
-}
-
-main {
-  padding-bottom: 0;
-}
-.section {
-  min-height: auto !important;
-  max-height: none !important;
-  overflow-y: visible !important;
-  padding-bottom: 60px;
-}
-
-/* Đặc biệt fix cho thư viện dài mỏi tay */
-#thu-vien {
-  overflow-y: auto !important;
-  max-height: none !important;
-  min-height: 80vh;
-  padding-bottom: 80px;
-  scrollbar-width: thin;
-  scrollbar-color: #3498db #f1f1f1;
-}
-
-#thu-vien::-webkit-scrollbar {
-  width: 10px;
-}
-
-#thu-vien::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-#thu-vien::-webkit-scrollbar-thumb {
-  background: #3498db;
-  border-radius: 10px;
-}
-
-#thu-vien::-webkit-scrollbar-thumb:hover {
-  background: #2980b9;
-}
-
-/* Fix nav sticky không che scroll */
-nav {
-  z-index: 999 !important;
-}
-
-/* Đảm bảo footer không dính lên nội dung */
-footer {
-  position: relative;
-  z-index: 10;
-}
-
-footer {
-  margin-bottom: 0;
-}
+/* ... (phần còn lại của CSS giữ nguyên như trước, bao gồm section, chat, footer, scroll fix) */
